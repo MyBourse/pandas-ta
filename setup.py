@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from distutils.core import setup
+from pandas_ta.core import version
 
-long_description = "An easy to use Python 3 Pandas Extension with 80+ Technical Analysis Indicators. Can be called from a Pandas DataFrame or standalone like TA-Lib."
+long_description = "An easy to use Python 3 Pandas Extension with 100+ Technical Analysis Indicators. Can be called from a Pandas DataFrame or standalone like TA-Lib."
 
 setup(
     name ="pandas_ta",
-    packages =['pandas_ta', 'pandas_ta.momentum', 'pandas_ta.overlap', 'pandas_ta.performance', 'pandas_ta.statistics', 'pandas_ta.trend', 'pandas_ta.volatility', 'pandas_ta.volume'],
-    version ="0.1.38b",
+    packages =['pandas_ta', 'pandas_ta.candles', 'pandas_ta.momentum', 'pandas_ta.overlap', 'pandas_ta.performance', 'pandas_ta.statistics', 'pandas_ta.trend', 'pandas_ta.volatility', 'pandas_ta.volume'],
+    version =version,
     description =long_description,
     long_description =long_description,
     author ="Kevin Johnson",
@@ -14,13 +15,16 @@ setup(
     url ="https://github.com/twopirllc/pandas-ta",
     maintainer ="Kevin Johnson",
     maintainer_email ="appliedmathkj@gmail.com",
-    # install_requires=['numpy','pandas'],
+    # install_requires=['pandas'],
     download_url ="https://github.com/twopirllc/pandas-ta.git",
-    keywords =['technical analysis', 'python3', 'pandas'],
+    keywords =['technical analysis', 'trading', 'python3', 'pandas'],
     license ="The MIT License (MIT)",
     classifiers =[
-        'Programming Language :: Python :: 3.7',
         'Development Status :: 4 - Beta',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Operating System :: OS Independent',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Intended Audience :: Developers',
@@ -28,6 +32,7 @@ setup(
         'Intended Audience :: Science/Research',
         'Topic :: Office/Business :: Financial',
         'Topic :: Office/Business :: Financial :: Investment',
+        'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Information Analysis',
     ],
     package_data={

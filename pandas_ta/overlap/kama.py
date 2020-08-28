@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import NaN as npNaN
-from pandas import Series
-from ..utils import get_drift, get_offset, verify_series
+from pandas import Series, DataFrame
+from ..utils import get_drift, get_offset, non_zero_range, verify_series
 
 def kama(close, length=None, fast=None, slow=None, drift=None, offset=None, **kwargs):
     """Indicator: Kaufman's Adaptive Moving Average (HMA)"""
@@ -15,11 +15,14 @@ def kama(close, length=None, fast=None, slow=None, drift=None, offset=None, **kw
 
     # Calculate Result
     m = close.size
-    fr = 2 / (fast + 1)
-    sr = 2 / (slow + 1)
-    
-    abs_diff = close.diff(length).abs()
-    peer_diff = close.diff(drift).abs()
+    def weight(length: int) -> float:
+        return 2 / (length + 1)
+
+    fr = weight(fast)
+    sr = weight(slow)
+
+    abs_diff = non_zero_range(close, close.shift(length)).abs()
+    peer_diff = non_zero_range(close, close.shift(drift)).abs()
     peer_diff_sum = peer_diff.rolling(length).sum()
     er = abs_diff / peer_diff_sum
     x = er * (fr - sr) + sr
@@ -29,7 +32,7 @@ def kama(close, length=None, fast=None, slow=None, drift=None, offset=None, **kw
     for i in range(length, m):
         result.append(sc[i] * close[i] + (1 - sc[i]) * result[i - 1])
     
-    kama = Series(result)
+    kama = Series(result, index=close.index)
 
     # Offset
     if offset != 0:
@@ -37,7 +40,7 @@ def kama(close, length=None, fast=None, slow=None, drift=None, offset=None, **kw
 
     # Name & Category
     kama.name = f"KAMA_{length}_{fast}_{slow}"
-    kama.category = 'overlap'
+    kama.category = "overlap"
 
     return kama
 
@@ -62,6 +65,9 @@ Calculation:
 Args:
     close (pd.Series): Series of 'close's
     length (int): It's period.  Default: 10
+    fast (int): Fast MA period.  Default: 2
+    slow (int): Slow MA period.  Default: 30
+    drift (int): The difference period.  Default: 1
     offset (int): How many periods to offset the result.  Default: 0
 
 Kwargs:

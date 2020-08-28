@@ -4,7 +4,7 @@ from .roc import roc
 from ..utils import get_drift, get_offset, verify_series
 
 def kst(close, roc1=None, roc2=None, roc3=None, roc4=None, sma1=None, sma2=None, sma3=None, sma4=None, signal=None, drift=None, offset=None, **kwargs):
-    """Indicator: 'Know Sure Thing'"""
+    """Indicator: 'Know Sure Thing' (KST)"""
     # Validate arguments
     close = verify_series(close)
     roc1 = int(roc1) if roc1 and roc1 > 0 else 10
@@ -45,14 +45,14 @@ def kst(close, roc1=None, roc2=None, roc3=None, roc4=None, sma1=None, sma2=None,
 
     # Name and Categorize it
     kst.name = f"KST_{roc1}_{roc2}_{roc3}_{roc4}_{sma1}_{sma2}_{sma3}_{sma4}"
-    kst_signal.name = f"KSTS_{signal}"
-    kst.category = kst_signal.category = 'momentum'
+    kst_signal.name = f"KSTs_{signal}"
+    kst.category = kst_signal.category = "momentum"
 
     # Prepare DataFrame to return
     data = {kst.name: kst, kst_signal.name: kst_signal}
     kstdf = DataFrame(data)
     kstdf.name = f"KST_{roc1}_{roc2}_{roc3}_{roc4}_{sma1}_{sma2}_{sma3}_{sma4}_{signal}"
-    kstdf.category = 'momentum'
+    kstdf.category = "momentum"
 
     return kstdf
 

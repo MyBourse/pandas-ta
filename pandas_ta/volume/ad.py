@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, verify_series
+from ..utils import get_offset, non_zero_range, verify_series
 
 def ad(high, low, close, volume, open_=None, offset=None, **kwargs):
     """Indicator: Accumulation/Distribution (AD)"""
@@ -8,17 +8,17 @@ def ad(high, low, close, volume, open_=None, offset=None, **kwargs):
     low = verify_series(low)
     close = verify_series(close)
     volume = verify_series(volume)
+    high_low_range = non_zero_range(high, low)
     offset = get_offset(offset)
 
     # Calculate Result
     if open_ is not None:
         open_ = verify_series(open_)
-        ad = close - open_  # AD with Open
-    else:                
-        ad = 2 * close - high - low  # AD with High, Low, Close
+        ad = non_zero_range(close, open_) # AD with Open
+    else:
+        ad = 2 * close - (high + low)  # AD with High, Low, Close
 
-    hl_range = high - low
-    ad *= volume / hl_range
+    ad *= volume / high_low_range
     ad = ad.cumsum()
 
     # Offset
@@ -26,14 +26,14 @@ def ad(high, low, close, volume, open_=None, offset=None, **kwargs):
         ad = ad.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        ad.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        ad.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        ad.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        ad.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     ad.name = "AD" if open_ is None else "ADo"
-    ad.category = 'volume'
+    ad.category = "volume"
 
     return ad
 
