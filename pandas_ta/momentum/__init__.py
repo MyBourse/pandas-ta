@@ -24,8 +24,10 @@ from .roc import roc
 from .rsi import rsi
 from .rvgi import rvgi
 from .slope import slope
+from .smi import smi
 from .squeeze import squeeze
 from .stoch import stoch
+from .stochrsi import stochrsi
 from .trix import trix
 from .tsi import tsi
 from .uo import uo

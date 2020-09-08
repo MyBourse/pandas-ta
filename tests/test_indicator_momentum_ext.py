@@ -166,6 +166,15 @@ class TestMomentumExtension(TestCase):
         self.assertIsInstance(self.data, DataFrame)
         self.assertEqual(self.data.columns[-1], "ANGLEd_1")
 
+    def test_smi_ext(self):
+        self.data.ta.smi(append=True)
+        self.assertIsInstance(self.data, DataFrame)
+        self.assertEqual(list(self.data.columns[-3:]), ["SMI_5_20_5", "SMIs_5_20_5", "SMIo_5_20_5"])
+
+        self.data.ta.smi(scalar=10, append=True)
+        self.assertIsInstance(self.data, DataFrame)
+        self.assertEqual(list(self.data.columns[-3:]), ["SMI_5_20_5_10.0", "SMIs_5_20_5_10.0", "SMIo_5_20_5_10.0"])
+
     def test_squeeze_ext(self):
         self.data.ta.squeeze(append=True)
         self.assertIsInstance(self.data, DataFrame)
@@ -178,7 +187,12 @@ class TestMomentumExtension(TestCase):
     def test_stoch_ext(self):
         self.data.ta.stoch(append=True)
         self.assertIsInstance(self.data, DataFrame)
-        self.assertEqual(list(self.data.columns[-4:]), ["STOCHFk_14", "STOCHFd_3", "STOCHk_5", "STOCHd_3"])
+        self.assertEqual(list(self.data.columns[-2:]), ["STOCHk_14_3_3", "STOCHd_14_3_3"])
+
+    def test_stochrsi_ext(self):
+        self.data.ta.stochrsi(append=True)
+        self.assertIsInstance(self.data, DataFrame)
+        self.assertEqual(list(self.data.columns[-2:]), ["STOCHRSIk_14_14_3_3", "STOCHRSId_14_14_3_3"])
 
     def test_trix_ext(self):
         self.data.ta.trix(append=True)

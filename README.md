@@ -7,7 +7,7 @@
 # Pandas Technical Analysis Library in _Python 3_
 ![Example Chart](/images/TA_Chart.png)
 
-_Pandas Technical Analysis_ (**Pandas TA**) is an easy to use library that is built upon Python's Pandas library with more than 115 Indicators and Utility functions.  These indicators are commonly used for financial time series datasets with columns or labels: datetime, _open_, _high_, _low_, _close_, _volume_, et al.  Many commonly used indicators are included, such as: _Simple Moving Average_ (**sma**) _Moving Average Convergence Divergence_ (**macd**), _Hull Exponential Moving Average_ (**hma**), _Bollinger Bands_ (**bbands**), _On-Balance Volume_ (**obv**), _Aroon & Aroon Oscillator_ (**aroon**), _Squeeze_ (**squeeze**) and **many more**.
+_Pandas Technical Analysis_ (**Pandas TA**) is an easy to use library that is built upon Python's Pandas library with more than 120 Indicators and Utility functions.  These indicators are commonly used for financial time series datasets with columns or labels: datetime, _open_, _high_, _low_, _close_, _volume_, et al.  Many commonly used indicators are included, such as: _Simple Moving Average_ (**sma**) _Moving Average Convergence Divergence_ (**macd**), _Hull Exponential Moving Average_ (**hma**), _Bollinger Bands_ (**bbands**), _On-Balance Volume_ (**obv**), _Aroon & Aroon Oscillator_ (**aroon**), _Squeeze_ (**squeeze**) and **many more**.
 
 **Pandas TA** has three different ways of processing Technical Indicators as described below. The **primary** requirement to run indicators in [Pandas DataFrame Extension](https://pandas.pydata.org/pandas-docs/stable/extending.html) mode, is that _open, high, low, close, volume_ are **lowercase**. Depending on the indicator, they either return a named Series or a DataFrame in uppercase underscore parameter format.  For example, MACD(fast=12, slow=26, signal=9) will return a DataFrame with columns: ['MACD_12_26_9', 'MACDh_12_26_9', 'MACDs_12_26_9'].
 
@@ -29,7 +29,7 @@ Please take a moment to read **this** and the rest of this **README** before pos
     * Documentation could always use improvement. Can you contribute?
 
 * ### [Indicator or Feature Requests & Contributions](https://github.com/twopirllc/pandas-ta/issues)
-    * Please be as detailed and concise as possible. Links and screenshots and sometimes data samples are welcome.
+    * Please be as detailed as possible. Links, screenshots, and sometimes data samples are welcome.
         * You want a new indicator not currently listed.
         * You want an alternate version of an existing indicator.
         * The indicator does not match another website, library, broker platform, language, et al.
@@ -38,7 +38,7 @@ Please take a moment to read **this** and the rest of this **README** before pos
 
 ## __Features__
 
-* Has 115+ indicators and utility functions.
+* Has 120+ indicators and utility functions.
 * Easily add prefixes or suffixes or both to columns names. Useful for building Custom Strategies.
 * __Extended Pandas DataFrame__ as 'ta'.
 * Indicators are tightly correlated with the de facto [TA Lib](https://mrjbq7.github.io/ta-lib/) if they share common indicators.
@@ -55,12 +55,23 @@ and _Weighted Moving Average_.
 * Updated *trend_return* utility to return a more pertinenet trade info for a _trend_. Example can be found in the [AI Example Notebook](https://github.com/twopirllc/pandas-ta/tree/master/examples/AIExample.ipynb). The notebook is still a work in progress and open to colloboration.
 
 
+## __Breaking Indicators__
+* _Stochastic Oscillator_ (**stoch**): Now in line with Trading View's calculation. See: ```help(ta.stoch)```
+
 ## __New Indicators__
 * _Squeeze_ (**squeeze**). A Momentum indicator. Both John Carter's TTM **and** Lazybear's TradingView versions are implemented. The default is John Carter's, or ```lazybear=False```. Set ```lazybear=True``` to enable Lazybear's.
+* _TTM Trend_ (**ttm_trend**). A trend indicator inspired from John Carter's book "Mastering the Trade".
+* _SMI Ergodic_ (**smi**) Developed by William Blau, the SMI Ergodic Indicator is the same as the True Strength Index (TSI) except the SMI includes a signal line and oscillator.
+* _Gann High-Low Activator_ (**hilo**) The Gann High Low Activator Indicator was created by Robert Krausz in a 1998
+issue of Stocks & Commodities Magazine. It is a moving average based trend
+indicator consisting of two different simple moving averages.
+* _Stochastic RSI_ (**stochrsi**) "Stochastic RSI and Dynamic Momentum Index" was created by Tushar Chande and Stanley Kroll. In line with Trading View's calculation. See: ```help(ta.stochrsi)```
 
 ## __Updated Indicators__
-* _Fisher Transform_ **fisher**: Added Fisher's default **ema** signal line. To change the length of the signal line, use the argument: ```signal=5```. Default: 5
-* _Fisher Transform_ **fisher** and _Kaufman's Adaptive Moving Average_ **kama**: Fixed a bug where their columns were not added to final DataFrame when using the _strategy_ method.
+* _Fisher Transform_ (**fisher**): Added Fisher's default **ema** signal line. To change the length of the signal line, use the argument: ```signal=5```. Default: 5
+* _Fisher Transform_ (**fisher**) and _Kaufman's Adaptive Moving Average_ (**kama**): Fixed a bug where their columns were not added to final DataFrame when using the _strategy_ method.
+* _Trend Return_ (**trend_return**): Returns a DataFrame now instead of Series.
+* _Average True Range_ (**atr**): Added option to return **atr** as a percentage. See: ```help(ta.atr)```
 
 
 ## What is a Pandas DataFrame Extension?
@@ -314,7 +325,7 @@ print(bothhl2.name)  # "pre_HL2_post"
 * _Doji_: **cdl_doji**
 * _Heikin-Ashi_: **ha**
 
-## _Momentum_ (31)
+## _Momentum_ (33)
 
 * _Awesome Oscillator_: **ao**
 * _Absolute Price Oscillator_: **apo**
@@ -341,9 +352,11 @@ print(bothhl2.name)  # "pre_HL2_post"
 * _Relative Strength Index_: **rsi**
 * _Relative Vigor Index_: **rvgi**
 * _Slope_: **slope**
+* _SMI Ergodic_ **smi**
 * _Squeeze_: **squeeze**
-    * Default is John Carter's. Enable Lazybear's by ```lazybear=True```
+    * Default is John Carter's. Enable Lazybear's with ```lazybear=True```
 * _Stochastic Oscillator_: **stoch**
+* _Stochastic RSI_: **stochrsi**
 * _Trix_: **trix**
 * _True strength index_: **tsi**
 * _Ultimate Oscillator_: **uo**
@@ -354,11 +367,12 @@ print(bothhl2.name)  # "pre_HL2_post"
 |:--------:|
 | ![Example MACD](/images/SPY_MACD.png) |
 
-## _Overlap_ (26)
+## _Overlap_ (27)
 
 * _Double Exponential Moving Average_: **dema**
 * _Exponential Moving Average_: **ema**
 * _Fibonacci's Weighted Moving Average_: **fwma**
+* _Gann High-Low Activator_: **hilo**
 * _High-Low Average_: **hl2**
 * _High-Low-Close Average_: **hlc3**
     * Commonly known as 'Typical Price' in Technical Analysis literature
@@ -417,7 +431,7 @@ Use parameter: cumulative=**True** for cumulative results.
 |:--------:|
 | ![Example Z Score](/images/SPY_ZScore.png) |
 
-## _Trend_ (14)
+## _Trend_ (15)
 
 * _Average Directional Movement Index_: **adx**
 * _Archer Moving Averages Trends_: **amat**
@@ -432,6 +446,7 @@ Use parameter: cumulative=**True** for cumulative results.
 * _Parabolic Stop and Reverse_: **psar**
 * _Q Stick_: **qstick**
 * _Short Run_: **short_run**
+* _TTM Trend_: **ttm_trend**
 * _Vortex_: **vortex**
 
 | _Average Directional Movement Index_ (ADX) |
@@ -491,6 +506,7 @@ Use parameter: cumulative=**True** for cumulative results.
 * [allahyarzadeh](https://github.com/allahyarzadeh)
 * [FGU1](https://github.com/FGU1)
 * [lluissalord](https://github.com/lluissalord)
+* [SoftDevDanial](https://github.com/SoftDevDanial)
 * [YuvalWein](https://github.com/YuvalWein)
 
 

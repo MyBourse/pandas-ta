@@ -20,7 +20,7 @@ class TestStrategyMethods(TestCase):
     def setUp(self): pass
     def tearDown(self): pass
 
-    
+
     def test_all(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy(verbose=False)
@@ -30,7 +30,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_all_strategy(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy(pandas_ta.AllStrategy, verbose=False)
@@ -40,7 +40,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_all_name_strategy(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy("All", verbose=False)
@@ -50,7 +50,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_candles_category(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy("Candles", verbose=False)
@@ -60,7 +60,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_common(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy(pandas_ta.CommonStrategy, verbose=False)
@@ -70,7 +70,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_custom_a(self):
         momo_bands_sma_ta = [
             {"kind":"sma", "length": 50}, # 1
@@ -81,6 +81,7 @@ class TestStrategyMethods(TestCase):
             {"kind":"log_return", "cumulative": True}, # 1
             {"kind":"sma", "close": "CUMLOGRET_1", "length": 5, "suffix": "CUMLOGRET"}, # 1
         ]
+
         custom = pandas_ta.Strategy(
             "Momo, Bands and SMAs and Cumulative Log Returns", # name
             momo_bands_sma_ta, # ta
@@ -95,7 +96,29 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
+    @skip
+    def test_custom_args_tuple(self):
+        custom_args_ta = [
+            {"kind":"fisher", "params": (13, 7)},
+            {"kind":"macd", "params": (9, 19, 7)},
+            {"kind":"ema", "params": (5,)},
+            {"kind":"linreg", "close": "EMA_5", "length": 8, "prefix": "EMA_5"}
+        ]
+
+        custom = pandas_ta.Strategy(
+            "Custom Args Tuple", custom_args_ta,
+            "Allow for easy filling in indicator arguments without naming them"
+        )
+
+        init_cols = len(self.data.columns)
+        self.data.ta.strategy(custom, verbose=False)
+        added_cols = len(self.data.columns) - init_cols
+
+        result = self.data[self.data.columns[-added_cols:]]
+        self.assertIsInstance(result, DataFrame)
+        self.data.drop(columns=result.columns, axis=1, inplace=True)
+
     def test_momentum_category(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy("Momentum", verbose=False)
@@ -105,7 +128,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_overlap_category(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy("Overlap", verbose=False)
@@ -115,7 +138,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_performance_category(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy("Performance", verbose=False)
@@ -125,7 +148,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_statistics_category(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy("Statistics", verbose=False)
@@ -135,7 +158,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_trend_category(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy("Trend", verbose=False)
@@ -145,7 +168,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_volatility_category(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy("Volatility", verbose=False)
@@ -155,7 +178,7 @@ class TestStrategyMethods(TestCase):
         result = self.data[self.data.columns[-added_cols:]]
         self.assertIsInstance(result, DataFrame)
         self.data.drop(columns=result.columns, axis=1, inplace=True)
-    
+
     def test_volume_category(self):
         init_cols = len(self.data.columns)
         self.data.ta.strategy("Volume", verbose=False)
