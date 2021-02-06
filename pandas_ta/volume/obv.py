@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, signed_series, verify_series
+from pandas_ta.utils import get_offset, signed_series, verify_series
+
 
 def obv(close, volume, offset=None, **kwargs):
     """Indicator: On Balance Volume (OBV)"""
@@ -17,17 +18,16 @@ def obv(close, volume, offset=None, **kwargs):
         obv = obv.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        obv.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        obv.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        obv.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        obv.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     obv.name = f"OBV"
-    obv.category = 'volume'
+    obv.category = "volume"
 
     return obv
-
 
 
 obv.__doc__ = \

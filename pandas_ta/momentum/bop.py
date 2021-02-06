@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, non_zero_range, verify_series
+from pandas_ta.utils import get_offset, non_zero_range, verify_series
+
 
 def bop(open_, high, low, close, scalar=None, offset=None, **kwargs):
     """Indicator: Balance of Power (BOP)"""
@@ -31,7 +32,6 @@ def bop(open_, high, low, close, scalar=None, offset=None, **kwargs):
     bop.category = "momentum"
 
     return bop
-
 
 
 bop.__doc__ = \

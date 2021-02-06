@@ -3,6 +3,7 @@ from pandas import DataFrame, concat
 from pandas_ta.overlap import rma
 from pandas_ta.utils import get_drift, get_offset, verify_series, signals
 
+
 def rsi(close, length=None, scalar=None, drift=None, offset=None, **kwargs):
     """Indicator: Relative Strength Index (RSI)"""
     # Validate arguments
@@ -55,13 +56,12 @@ def rsi(close, length=None, scalar=None, drift=None, offset=None, **kwargs):
                     offset=offset,
                 ),
             ],
-            axis=1
+            axis=1,
         )
 
         return signalsdf
     else:
         return rsi
-
 
 
 rsi.__doc__ = \
@@ -89,10 +89,10 @@ Calculation:
 
 Args:
     close (pd.Series): Series of 'close's
-    length (int): It's period.  Default: 1
-    scalar (float): How much to magnify.  Default: 100
-    drift (int): The difference period.  Default: 1
-    offset (int): How many periods to offset the result.  Default: 0
+    length (int): It's period. Default: 14
+    scalar (float): How much to magnify. Default: 100
+    drift (int): The difference period. Default: 1
+    offset (int): How many periods to offset the result. Default: 0
 
 Kwargs:
     fillna (value, optional): pd.DataFrame.fillna(value)

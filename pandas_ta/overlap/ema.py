@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
 from numpy import NaN as npNaN
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def ema(close, length=None, offset=None, **kwargs):
     """Indicator: Exponential Moving Average (EMA)"""
     # Validate Arguments
     close = verify_series(close)
     length = int(length) if length and length > 0 else 10
-    # min_periods = kwargs.pop('min_periods', length)
-    adjust = kwargs.pop('adjust', False)
-    sma = kwargs.pop('sma', True)
-    win_type = kwargs.pop('win_type', None)
+    adjust = kwargs.pop("adjust", False)
+    sma = kwargs.pop("sma", True)
     offset = get_offset(offset)
 
     # Calculate Result
     if sma:
         close = close.copy()
-        sma_nth = close[0:length].sum() / length
+        sma_nth = close[0:length].mean()
         close[:length - 1] = npNaN
         close.iloc[length - 1] = sma_nth
     ema = close.ewm(span=length, adjust=adjust).mean()
@@ -27,10 +26,9 @@ def ema(close, length=None, offset=None, **kwargs):
 
     # Name & Category
     ema.name = f"EMA_{length}"
-    ema.category = 'overlap'
+    ema.category = "overlap"
 
     return ema
-
 
 
 ema.__doc__ = \

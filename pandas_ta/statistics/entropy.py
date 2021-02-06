@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from numpy import log as npLog
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def entropy(close, length=None, base=None, offset=None, **kwargs):
     """Indicator: Entropy (ENTP)"""
     # Validate Arguments
     close = verify_series(close)
     length = int(length) if length and length > 0 else 10
-    base = float(base) if base and base > 0 else 2.
+    base = float(base) if base and base > 0 else 2.0
     offset = get_offset(offset)
 
     # Calculate Result
@@ -25,7 +26,6 @@ def entropy(close, length=None, base=None, offset=None, **kwargs):
     return entropy
 
 
-
 entropy.__doc__ = \
 """Entropy (ENTP)
 
@@ -39,15 +39,15 @@ Sources:
 Calculation:
     Default Inputs:
         length=10, base=2
-    
+
     P = close / SUM(close, length)
     E = SUM(-P * npLog(P) / npLog(base), length)
 
 Args:
     close (pd.Series): Series of 'close's
-    length (int): It's period.  Default: 10
-    base (float): Logarithmic Base.  Default: 2
-    offset (int): How many periods to offset the result.  Default: 0
+    length (int): It's period. Default: 10
+    base (float): Logarithmic Base. Default: 2
+    offset (int): How many periods to offset the result. Default: 0
 
 Kwargs:
     fillna (value, optional): pd.DataFrame.fillna(value)

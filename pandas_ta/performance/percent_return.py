@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from pandas_ta.utils import get_offset, verify_series
 
+
 def percent_return(close, length=None, cumulative=False, offset=None, **kwargs):
     """Indicator: Percent Return"""
     # Validate Arguments
@@ -23,7 +24,6 @@ def percent_return(close, length=None, cumulative=False, offset=None, **kwargs):
     pct_return.category = "performance"
 
     return pct_return
-
 
 
 percent_return.__doc__ = \

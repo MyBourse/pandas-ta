@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from pandas import DataFrame, concat
-from ..overlap.ema import ema
-from ..utils import get_offset, verify_series, signals
+from pandas_ta.overlap import ema
+from pandas_ta.utils import get_offset, verify_series, signals
+
 
 def macd(close, fast=None, slow=None, signal=None, offset=None, **kwargs):
     """Indicator: Moving Average, Convergence/Divergence (MACD)"""
@@ -19,7 +20,7 @@ def macd(close, fast=None, slow=None, signal=None, offset=None, **kwargs):
     slowma = ema(close, length=slow)
 
     macd = fastma - slowma
-    signalma = ema(close=macd, length=signal)
+    signalma = ema(close=macd.loc[macd.first_valid_index():,], length=signal)
     histogram = macd - signalma
 
     # Offset
@@ -79,13 +80,12 @@ def macd(close, fast=None, slow=None, signal=None, offset=None, **kwargs):
                     offset=offset,
                 ),
             ],
-            axis=1
+            axis=1,
         )
 
         return signalsdf
     else:
         return df
-
 
 
 macd.__doc__ = \

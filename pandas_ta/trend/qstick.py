@@ -2,6 +2,7 @@
 from pandas_ta.overlap import dema, ema, hma, rma, sma
 from pandas_ta.utils import get_offset, non_zero_range, verify_series
 
+
 def qstick(open_, close, length=None, offset=None, **kwargs):
     """Indicator: Q Stick"""
     # Validate Arguments
@@ -14,11 +15,16 @@ def qstick(open_, close, length=None, offset=None, **kwargs):
     # Calculate Result
     diff = non_zero_range(close, open_)
 
-    if ma in [None, "sma"]: qstick = sma(diff, length=length)
-    if ma == "dema": qstick = dema(diff, length=length, **kwargs)
-    if ma == "ema": qstick = ema(diff, length=length, **kwargs)
-    if ma == "hma": qstick = hma(diff, length=length)
-    if ma == "rma": qstick = rma(diff, length=length)
+    if ma == "dema":
+        qstick = dema(diff, length=length, **kwargs)
+    elif ma == "ema":
+        qstick = ema(diff, length=length, **kwargs)
+    elif ma == "hma":
+        qstick = hma(diff, length=length)
+    elif ma == "rma":
+        qstick = rma(diff, length=length)
+    else: # "sma"
+        qstick = sma(diff, length=length)
 
     # Offset
     if offset != 0:
@@ -35,7 +41,6 @@ def qstick(open_, close, length=None, offset=None, **kwargs):
     qstick.category = "trend"
 
     return qstick
-
 
 
 qstick.__doc__ = \

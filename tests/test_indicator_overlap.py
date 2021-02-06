@@ -5,9 +5,7 @@ from unittest import TestCase
 import pandas.testing as pdt
 from pandas import DataFrame, Series
 
-import pandas as pd
 import talib as tal
-
 
 
 class TestOverlap(TestCase):
@@ -19,7 +17,8 @@ class TestOverlap(TestCase):
         cls.high = cls.data["high"]
         cls.low = cls.data["low"]
         cls.close = cls.data["close"]
-        if "volume" in cls.data.columns: cls.volume = cls.data["volume"]
+        if "volume" in cls.data.columns:
+            cls.volume = cls.data["volume"]
 
     @classmethod
     def tearDownClass(cls):
@@ -27,10 +26,9 @@ class TestOverlap(TestCase):
         del cls.high
         del cls.low
         del cls.close
-        if hasattr(cls, "volume"): del cls.volume
+        if hasattr(cls, "volume"):
+            del cls.volume
         del cls.data
-
-
 
     def setUp(self): pass
     def tearDown(self): pass
@@ -178,6 +176,24 @@ class TestOverlap(TestCase):
             except Exception as ex:
                 error_analysis(result, CORRELATION, ex)
 
+    def test_ma(self):
+        result = pandas_ta.ma()
+        self.assertIsInstance(result, list)
+        self.assertGreater(len(result), 0)
+
+        result = pandas_ta.ma("ema", self.close)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "EMA_10")
+
+        result = pandas_ta.ma("fwma", self.close, length=15)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "FWMA_15")
+
+    def test_mcgd(self):
+        result = pandas_ta.mcgd(self.close)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "MCGD_10")
+
     def test_midpoint(self):
         result = pandas_ta.midpoint(self.close)
         self.assertIsInstance(result, Series)
@@ -243,6 +259,15 @@ class TestOverlap(TestCase):
             except Exception as ex:
                 error_analysis(result, CORRELATION, ex)
 
+    def test_ssf(self):
+        result = pandas_ta.ssf(self.close, poles=2)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "SSF_10_2")
+
+        result = pandas_ta.ssf(self.close, poles=3)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "SSF_10_3")
+
     def test_swma(self):
         result = pandas_ta.swma(self.close)
         self.assertIsInstance(result, Series)
@@ -298,10 +323,15 @@ class TestOverlap(TestCase):
             except Exception as ex:
                 error_analysis(result, CORRELATION, ex)
 
+    def test_vidya(self):
+        result = pandas_ta.vidya(self.close)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "VIDYA_14")
+
     def test_vwap(self):
         result = pandas_ta.vwap(self.high, self.low, self.close, self.volume)
         self.assertIsInstance(result, Series)
-        self.assertEqual(result.name, "VWAP")
+        self.assertEqual(result.name, "VWAP_D")
 
     def test_vwma(self):
         result = pandas_ta.vwma(self.close, self.volume)

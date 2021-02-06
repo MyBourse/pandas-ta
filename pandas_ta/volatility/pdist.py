@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_drift, get_offset, non_zero_range, verify_series
+from pandas_ta.utils import get_drift, get_offset, non_zero_range, verify_series
+
 
 def pdist(open_, high, low, close, drift=None, offset=None, **kwargs):
     """Indicator: Price Distance (PDIST)"""
@@ -22,10 +23,9 @@ def pdist(open_, high, low, close, drift=None, offset=None, **kwargs):
 
     # Name & Category
     pdist.name = "PDIST"
-    pdist.category = 'volatility'
+    pdist.category = "volatility"
 
     return pdist
-
 
 
 pdist.__doc__ = \

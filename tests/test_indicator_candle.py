@@ -8,7 +8,6 @@ from pandas import DataFrame, Series
 import talib as tal
 
 
-
 class TestCandle(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -18,7 +17,8 @@ class TestCandle(TestCase):
         cls.high = cls.data["high"]
         cls.low = cls.data["low"]
         cls.close = cls.data["close"]
-        if "volume" in cls.data.columns: cls.volume = cls.data["volume"]
+        if "volume" in cls.data.columns:
+            cls.volume = cls.data["volume"]
 
     @classmethod
     def tearDownClass(cls):
@@ -26,9 +26,9 @@ class TestCandle(TestCase):
         del cls.high
         del cls.low
         del cls.close
-        if hasattr(cls, "volume"): del cls.volume
+        if hasattr(cls, "volume"):
+            del cls.volume
         del cls.data
-
 
     def setUp(self): pass
     def tearDown(self): pass
@@ -53,3 +53,12 @@ class TestCandle(TestCase):
                 self.assertGreater(corr, CORRELATION_THRESHOLD)
             except Exception as ex:
                 error_analysis(result, CORRELATION, ex)
+
+    def test_cdl_inside(self):
+        result = pandas_ta.cdl_inside(self.open, self.high, self.low, self.close)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "CDL_INSIDE")
+
+        result = pandas_ta.cdl_inside(self.open, self.high, self.low, self.close, asbool=True)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "CDL_INSIDE")

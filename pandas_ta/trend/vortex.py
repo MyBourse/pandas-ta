@@ -3,6 +3,7 @@ from pandas import DataFrame
 from pandas_ta.volatility import true_range
 from pandas_ta.utils import get_drift, get_offset, verify_series, zero
 
+
 def vortex(high, low, close, length=None, drift=None, offset=None, **kwargs):
     """Indicator: Vortex"""
     # Validate arguments
@@ -49,7 +50,6 @@ def vortex(high, low, close, length=None, drift=None, offset=None, **kwargs):
     vtxdf.category = "trend"
 
     return vtxdf
-
 
 
 vortex.__doc__ = \

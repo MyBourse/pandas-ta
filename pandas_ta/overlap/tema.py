@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from .ema import ema
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def tema(close, length=None, offset=None, **kwargs):
     """Indicator: Triple Exponential Moving Average (TEMA)"""
     # Validate Arguments
     close = verify_series(close)
     length = int(length) if length and length > 0 else 10
-    min_periods = int(kwargs['min_periods']) if 'min_periods' in kwargs and kwargs['min_periods'] is not None else length
     offset = get_offset(offset)
 
     # Calculate Result
@@ -22,10 +22,9 @@ def tema(close, length=None, offset=None, **kwargs):
 
     # Name & Category
     tema.name = f"TEMA_{length}"
-    tema.category = 'overlap'
+    tema.category = "overlap"
 
     return tema
-
 
 
 tema.__doc__ = \

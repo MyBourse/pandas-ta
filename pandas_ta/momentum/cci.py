@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from ..overlap.hlc3 import hlc3
-from ..overlap.sma import sma
-from ..statistics.mad import mad
-from ..utils import get_offset, verify_series
+from pandas_ta.overlap import hlc3, sma
+from pandas_ta.statistics.mad import mad
+from pandas_ta.utils import get_offset, verify_series
+
 
 def cci(high, low, close, length=None, c=None, offset=None, **kwargs):
     """Indicator: Commodity Channel Index (CCI)"""
@@ -27,17 +27,16 @@ def cci(high, low, close, length=None, c=None, offset=None, **kwargs):
         cci = cci.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        cci.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        cci.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        cci.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        cci.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     cci.name = f"CCI_{length}_{c}"
-    cci.category = 'momentum'
+    cci.category = "momentum"
 
     return cci
-
 
 
 cci.__doc__ = \

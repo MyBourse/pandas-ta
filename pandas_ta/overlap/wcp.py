@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def wcp(high, low, close, offset=None, **kwargs):
     """Indicator: Weighted Closing Price (WCP)"""
@@ -18,10 +19,9 @@ def wcp(high, low, close, offset=None, **kwargs):
 
     # Name & Category
     wcp.name = "WCP"
-    wcp.category = 'overlap'
+    wcp.category = "overlap"
 
     return wcp
-
 
 
 wcp.__doc__ = \

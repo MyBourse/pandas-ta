@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, verify_series, weights
+from pandas_ta.utils import get_offset, verify_series, weights
+
 
 def cg(close, length=None, offset=None, **kwargs):
     """Indicator: Center of Gravity (CG)"""
@@ -18,17 +19,16 @@ def cg(close, length=None, offset=None, **kwargs):
         cg = cg.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        cg.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        cg.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        cg.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        cg.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     cg.name = f"CG_{length}"
-    cg.category = 'momentum'
+    cg.category = "momentum"
 
     return cg
-
 
 
 cg.__doc__ = \

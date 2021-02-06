@@ -3,7 +3,8 @@ from pandas_ta.overlap import sma
 from pandas_ta.utils import get_offset, high_low_range, is_percent
 from pandas_ta.utils import non_zero_range, real_body, verify_series
 
-def cdl_doji(open_, high, low, close, length=None, factor=None, scalar=None, asint=True, offset=None, **kwargs):
+
+def cdl_doji( open_, high, low, close, length=None, factor=None, scalar=None, asint=True, offset=None, **kwargs):
     """Candle Type: Doji"""
     # Validate Arguments
     open_ = verify_series(open_)

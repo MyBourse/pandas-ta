@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from .ad import ad
-from ..overlap.ema import ema
-from ..utils import get_offset, verify_series
+from pandas_ta.overlap import ema
+from pandas_ta.utils import get_offset, verify_series
+
 
 def adosc(high, low, close, volume, open_=None, fast=None, slow=None, offset=None, **kwargs):
     """Indicator: Accumulation/Distribution Oscillator"""
@@ -25,23 +26,22 @@ def adosc(high, low, close, volume, open_=None, fast=None, slow=None, offset=Non
         adosc = adosc.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        adosc.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        adosc.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        adosc.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        adosc.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     adosc.name = f"ADOSC_{fast}_{slow}"
-    adosc.category = 'volume'
+    adosc.category = "volume"
 
     return adosc
-
 
 
 adosc.__doc__ = \
 """Accumulation/Distribution Oscillator or Chaikin Oscillator
 
-Accumulation/Distribution Oscillator indicator utilizes 
+Accumulation/Distribution Oscillator indicator utilizes
 Accumulation/Distribution and treats it similarily to MACD
 or APO.
 

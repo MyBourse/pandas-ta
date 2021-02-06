@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from pandas import DataFrame
-from ..utils import get_drift, get_offset, non_zero_range, verify_series
+from pandas_ta.utils import get_drift, get_offset, non_zero_range, verify_series
+
 
 def true_range(high, low, close, drift=None, offset=None, **kwargs):
     """Indicator: True Range"""
@@ -23,17 +24,16 @@ def true_range(high, low, close, drift=None, offset=None, **kwargs):
         true_range = true_range.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        true_range.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        true_range.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        true_range.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        true_range.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     true_range.name = f"TRUERANGE_{drift}"
-    true_range.category = 'volatility'
+    true_range.category = "volatility"
 
     return true_range
-
 
 
 true_range.__doc__ = \
@@ -50,7 +50,7 @@ Calculation:
         drift=1
     ABS = Absolute Value
     prev_close = close.shift(drift)
-    TRUE_RANGE = ABS([high - low, high - prev_close, low - prev_close]) 
+    TRUE_RANGE = ABS([high - low, high - prev_close, low - prev_close])
 
 Args:
     high (pd.Series): Series of 'high's

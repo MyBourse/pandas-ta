@@ -2,9 +2,9 @@
 # from numpy import sqrt as npsqrt
 from pandas import DataFrame
 from .atr import atr
-from ..overlap.hlc3 import hlc3
-from ..overlap.sma import sma
-from ..utils import get_offset, non_zero_range, verify_series
+from pandas_ta.overlap import hlc3, sma
+from pandas_ta.utils import get_offset, non_zero_range, verify_series
+
 
 def aberration(high, low, close, length=None, atr_length=None, offset=None, **kwargs):
     """Indicator: Aberration (ABER)"""
@@ -53,18 +53,12 @@ def aberration(high, low, close, length=None, atr_length=None, offset=None, **kw
     xg.category = atr_.category = zg.category
 
     # Prepare DataFrame to return
-    data = {
-        zg.name: zg,
-        sg.name: sg,
-        xg.name: xg,
-        atr_.name: atr_
-    }
+    data = {zg.name: zg, sg.name: sg, xg.name: xg, atr_.name: atr_}
     aberdf = DataFrame(data)
     aberdf.name = f"ABER{_props}"
     aberdf.category = zg.category
 
     return aberdf
-
 
 
 aberration.__doc__ = \

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from pandas import DataFrame
-from ..utils import get_drift, get_offset, verify_series
+from pandas_ta.utils import get_drift, get_offset, verify_series
+
 
 def uo(high, low, close, fast=None, medium=None, slow=None, fast_w=None, medium_w=None, slow_w=None, drift=None, offset=None, **kwargs):
     """Indicator: Ultimate Oscillator (UO)"""
@@ -21,9 +22,13 @@ def uo(high, low, close, fast=None, medium=None, slow=None, fast_w=None, medium_
     slow_w = float(slow_w) if slow_w and slow_w > 0 else 1.0
 
     # Calculate Result
-    tdf = DataFrame({'high': high, 'low': low, f"close_{drift}": close.shift(drift)})
-    max_h_or_pc = tdf.loc[:, ['high', f"close_{drift}"]].max(axis=1)
-    min_l_or_pc = tdf.loc[:, ['low', f"close_{drift}"]].min(axis=1)
+    tdf = DataFrame({
+        "high": high,
+        "low": low,
+        f"close_{drift}": close.shift(drift)
+    })
+    max_h_or_pc = tdf.loc[:, ["high", f"close_{drift}"]].max(axis=1)
+    min_l_or_pc = tdf.loc[:, ["low", f"close_{drift}"]].min(axis=1)
     del tdf
 
     bp = close - min_l_or_pc
@@ -33,7 +38,7 @@ def uo(high, low, close, fast=None, medium=None, slow=None, fast_w=None, medium_
     medium_avg = bp.rolling(medium).sum() / tr.rolling(medium).sum()
     slow_avg = bp.rolling(slow).sum() / tr.rolling(slow).sum()
 
-    total_weight =  fast_w + medium_w + slow_w
+    total_weight = fast_w + medium_w + slow_w
     weights = (fast_w * fast_avg) + (medium_w * medium_avg) + (slow_w * slow_avg)
     uo = 100 * weights / total_weight
 
@@ -42,17 +47,16 @@ def uo(high, low, close, fast=None, medium=None, slow=None, fast_w=None, medium_
         uo = uo.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        uo.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        uo.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        uo.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        uo.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     uo.name = f"UO_{fast}_{medium}_{slow}"
-    uo.category = 'momentum'
+    uo.category = "momentum"
 
     return uo
-
 
 
 uo.__doc__ = \

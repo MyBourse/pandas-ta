@@ -5,6 +5,7 @@ from .bias import bias
 from .bop import bop
 from .brar import brar
 from .cci import cci
+from .cfo import cfo
 from .cg import cg
 from .cmo import cmo
 from .coppock import coppock
@@ -20,8 +21,10 @@ from .pgo import pgo
 from .ppo import ppo
 from .psl import psl
 from .pvo import pvo
+from .qqe import qqe
 from .roc import roc
 from .rsi import rsi
+from .rsx import rsx
 from .rvgi import rvgi
 from .slope import slope
 from .smi import smi

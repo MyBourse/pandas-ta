@@ -8,7 +8,6 @@ from pandas import DataFrame, Series
 import talib as tal
 
 
-
 class TestTrend(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -18,7 +17,8 @@ class TestTrend(TestCase):
         cls.high = cls.data["high"]
         cls.low = cls.data["low"]
         cls.close = cls.data["close"]
-        if "volume" in cls.data.columns: cls.volume = cls.data["volume"]
+        if "volume" in cls.data.columns:
+            cls.volume = cls.data["volume"]
 
     @classmethod
     def tearDownClass(cls):
@@ -26,13 +26,13 @@ class TestTrend(TestCase):
         del cls.high
         del cls.low
         del cls.close
-        if hasattr(cls, "volume"): del cls.volume
+        if hasattr(cls, "volume"):
+            del cls.volume
         del cls.data
-
 
     def setUp(self): pass
     def tearDown(self): pass
-    
+
 
     def test_adx(self):
         result = pandas_ta.adx(self.high, self.low, self.close)
@@ -41,10 +41,10 @@ class TestTrend(TestCase):
 
         try:
             expected = tal.ADX(self.high, self.low, self.close)
-            pdt.assert_series_equal(result.iloc[:,0], expected)
+            pdt.assert_series_equal(result.iloc[:, 0], expected)
         except AssertionError as ae:
             try:
-                corr = pandas_ta.utils.df_error_analysis(result.iloc[:,0], expected, col=CORRELATION)
+                corr = pandas_ta.utils.df_error_analysis(result.iloc[:, 0], expected, col=CORRELATION)
                 self.assertGreater(corr, CORRELATION_THRESHOLD)
             except Exception as ex:
                 error_analysis(result, CORRELATION, ex)
@@ -65,29 +65,29 @@ class TestTrend(TestCase):
             pdt.assert_frame_equal(result, expecteddf)
         except AssertionError as ae:
             try:
-                aroond_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,0], expecteddf.iloc[:,0], col=CORRELATION)
+                aroond_corr = pandas_ta.utils.df_error_analysis(result.iloc[:, 0], expecteddf.iloc[:, 0], col=CORRELATION)
                 self.assertGreater(aroond_corr, CORRELATION_THRESHOLD)
             except Exception as ex:
-                error_analysis(result.iloc[:,0], CORRELATION, ex)
+                error_analysis(result.iloc[:, 0], CORRELATION, ex)
 
             try:
-                aroonu_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,1], expecteddf.iloc[:,1], col=CORRELATION)
+                aroonu_corr = pandas_ta.utils.df_error_analysis(result.iloc[:, 1], expecteddf.iloc[:, 1], col=CORRELATION)
                 self.assertGreater(aroonu_corr, CORRELATION_THRESHOLD)
             except Exception as ex:
-                error_analysis(result.iloc[:,1], CORRELATION, ex, newline=False)
+                error_analysis(result.iloc[:, 1], CORRELATION, ex, newline=False)
 
     def test_aroon_osc(self):
         result = pandas_ta.aroon(self.high, self.low)
 
         try:
             expected = tal.AROONOSC(self.high, self.low)
-            pdt.assert_series_equal(result.iloc[:,2], expected)
+            pdt.assert_series_equal(result.iloc[:, 2], expected)
         except AssertionError as ae:
             try:
-                aroond_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,2], expected, col=CORRELATION)
+                aroond_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,2], expected,col=CORRELATION)
                 self.assertGreater(aroond_corr, CORRELATION_THRESHOLD)
             except Exception as ex:
-                error_analysis(result.iloc[:,0], CORRELATION, ex)
+                error_analysis(result.iloc[:, 0], CORRELATION, ex)
 
     def test_chop(self):
         result = pandas_ta.chop(self.high, self.low, self.close)
@@ -99,10 +99,23 @@ class TestTrend(TestCase):
         self.assertIsInstance(result, DataFrame)
         self.assertEqual(result.name, "CKSP_10_1_9")
 
+    def test_decay(self):
+        result = pandas_ta.decay(self.close)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "LDECAY_5")
+
+        result = pandas_ta.decay(self.close, mode="exp")
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "EXPDECAY_5")
+
     def test_decreasing(self):
         result = pandas_ta.decreasing(self.close)
         self.assertIsInstance(result, Series)
         self.assertEqual(result.name, "DEC_1")
+
+        result = pandas_ta.decreasing(self.close, length=3, strict=True)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "SDEC_3")
 
     def test_dpo(self):
         result = pandas_ta.dpo(self.close)
@@ -114,10 +127,9 @@ class TestTrend(TestCase):
         self.assertIsInstance(result, Series)
         self.assertEqual(result.name, "INC_1")
 
-    def test_linear_decay(self):
-        result = pandas_ta.linear_decay(self.close)
+        result = pandas_ta.increasing(self.close, length=3, strict=True)
         self.assertIsInstance(result, Series)
-        self.assertEqual(result.name, "LDECAY_5")
+        self.assertEqual(result.name, "SINC_3")
 
     def test_long_run(self):
         result = pandas_ta.long_run(self.close, self.open)

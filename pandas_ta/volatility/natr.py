@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from .atr import atr
-from ..utils import get_drift, get_offset, verify_series
+from pandas_ta.utils import get_drift, get_offset, verify_series
+
 
 def natr(high, low, close, length=None, mamode=None, scalar=None, drift=None, offset=None, **kwargs):
     """Indicator: Normalized Average True Range (NATR)"""
@@ -9,7 +10,7 @@ def natr(high, low, close, length=None, mamode=None, scalar=None, drift=None, of
     low = verify_series(low)
     close = verify_series(close)
     length = int(length) if length and length > 0 else 14
-    mamode = mamode.lower() if mamode else 'ema'
+    mamode = mamode if isinstance(mamode, str) else "ema"
     scalar = float(scalar) if scalar else 100
     drift = get_drift(drift)
     offset = get_offset(offset)
@@ -23,17 +24,16 @@ def natr(high, low, close, length=None, mamode=None, scalar=None, drift=None, of
         natr = natr.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        natr.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        natr.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        natr.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        natr.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     natr.name = f"NATR_{length}"
-    natr.category = 'volatility'
+    natr.category = "volatility"
 
     return natr
-
 
 
 natr.__doc__ = \

@@ -3,6 +3,7 @@ from pandas import DataFrame
 from pandas_ta.overlap import sma
 from pandas_ta.utils import get_offset, non_zero_range, verify_series
 
+
 def stoch(high, low, close, k=None, d=None, smooth_k=None, offset=None, **kwargs):
     """Indicator: Stochastic Oscillator (STOCH)"""
     # Validate arguments
@@ -15,10 +16,10 @@ def stoch(high, low, close, k=None, d=None, smooth_k=None, offset=None, **kwargs
     offset = get_offset(offset)
 
     # Calculate Result
-    lowest_low   =  low.rolling(k).min()
+    lowest_low = low.rolling(k).min()
     highest_high = high.rolling(k).max()
 
-    stoch  = 100 * (close - lowest_low)
+    stoch = 100 * (close - lowest_low)
     stoch /= non_zero_range(highest_high, lowest_low)
 
     stoch_k = sma(stoch, length=smooth_k)
@@ -51,7 +52,6 @@ def stoch(high, low, close, k=None, d=None, smooth_k=None, offset=None, **kwargs
     df.category = stoch_k.category
 
     return df
-
 
 
 stoch.__doc__ = \

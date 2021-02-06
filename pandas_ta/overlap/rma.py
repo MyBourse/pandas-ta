@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def rma(close, length=None, offset=None, **kwargs):
     """Indicator: wildeR's Moving Average (RMA)"""
@@ -10,7 +11,7 @@ def rma(close, length=None, offset=None, **kwargs):
     alpha = (1.0 / length) if length > 0 else 0.5
 
     # Calculate Result
-    rma = close.ewm(alpha=alpha).mean()
+    rma = close.ewm(alpha=alpha, min_periods=length).mean()
 
     # Offset
     if offset != 0:
@@ -23,15 +24,14 @@ def rma(close, length=None, offset=None, **kwargs):
     return rma
 
 
-
 rma.__doc__ = \
 """wildeR's Moving Average (RMA)
 
-The WildeR's Moving Average is simply an Exponential Moving Average (EMA)
-with a modified alpha = 1 / length.
+The WildeR's Moving Average is simply an Exponential Moving Average (EMA) with a modified alpha = 1 / length.
 
 Sources:
-    https://alanhull.com/hull-moving-average
+    https://tlc.thinkorswim.com/center/reference/Tech-Indicators/studies-library/V-Z/WildersSmoothing
+    https://www.incrediblecharts.com/indicators/wilder_moving_average.php
 
 Calculation:
     Default Inputs:

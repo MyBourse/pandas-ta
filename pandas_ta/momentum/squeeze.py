@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from numpy import NaN as npNaN
-from pandas import concat, DataFrame
+from pandas import DataFrame
 
 from pandas_ta.momentum import mom
 from pandas_ta.overlap import ema, linreg, sma
-from pandas_ta.statistics import stdev
 from pandas_ta.trend import decreasing, increasing
-from pandas_ta.volatility import bbands, kc, true_range
-from pandas_ta.utils import get_drift, get_offset, high_low_range
+from pandas_ta.volatility import bbands, kc
+from pandas_ta.utils import get_offset
 from pandas_ta.utils import unsigned_differences, verify_series
+
 
 def squeeze(high, low, close, bb_length=None, bb_std=None, kc_length=None, kc_scalar=None, mom_length=None, mom_smooth=None, use_tr=None, offset=None, **kwargs):
     """Indicator: Squeeze Momentum (SQZ)"""
@@ -19,7 +19,7 @@ def squeeze(high, low, close, bb_length=None, bb_std=None, kc_length=None, kc_sc
     offset = get_offset(offset)
 
     bb_length = int(bb_length) if bb_length and bb_length > 0 else 20
-    bb_std = float(bb_std) if bb_std and bb_std > 0 else 2.
+    bb_std = float(bb_std) if bb_std and bb_std > 0 else 2.0
     kc_length = int(kc_length) if kc_length and kc_length > 0 else 20
     kc_scalar = float(kc_scalar) if kc_scalar and kc_scalar > 0 else 1.5
     mom_length = int(mom_length) if mom_length and mom_length > 0 else 12
@@ -27,13 +27,13 @@ def squeeze(high, low, close, bb_length=None, bb_std=None, kc_length=None, kc_sc
 
     use_tr = kwargs.setdefault("tr", True)
     asint = kwargs.pop("asint", True)
-    mamode = kwargs.pop("mamode", "sma").lower()
-    lazybear = kwargs.pop("lazybear", False)
     detailed = kwargs.pop("detailed", False)
+    lazybear = kwargs.pop("lazybear", False)
+    mamode = kwargs.pop("mamode", "sma").lower()
 
     def simplify_columns(df, n=3):
         df.columns = df.columns.str.lower()
-        return [c.split('_')[0][n-1:n] for c in df.columns]
+        return [c.split("_")[0][n - 1:n] for c in df.columns]
 
     # Calculate Result
     bbd = bbands(close, length=bb_length, std=bb_std, mamode=mamode)
@@ -45,16 +45,16 @@ def squeeze(high, low, close, bb_length=None, bb_std=None, kc_length=None, kc_sc
 
     if lazybear:
         highest_high = high.rolling(kc_length).max()
-        lowest_low   = low.rolling(kc_length).min()
-        avg_  = 0.25 * (highest_high + lowest_low) + 0.5 * kch.b
+        lowest_low = low.rolling(kc_length).min()
+        avg_ = 0.25 * (highest_high + lowest_low) + 0.5 * kch.b
 
         squeeze = linreg(close - avg_, length=kc_length)
 
     else:
         momo = mom(close, length=mom_length)
-        if mamode == "ema":
+        if mamode.lower() == "ema":
             squeeze = ema(momo, length=mom_smooth)
-        else:
+        else: # "sma"
             squeeze = sma(momo, length=mom_smooth)
 
     # Classify Squeezes
@@ -91,7 +91,7 @@ def squeeze(high, low, close, bb_length=None, bb_std=None, kc_length=None, kc_sc
         squeeze.name: squeeze,
         f"SQZ_ON": squeeze_on.astype(int) if asint else squeeze_on,
         f"SQZ_OFF": squeeze_off.astype(int) if asint else squeeze_off,
-        f"SQZ_NO": no_squeeze.astype(int) if asint else no_squeeze
+        f"SQZ_NO": no_squeeze.astype(int) if asint else no_squeeze,
     }
     df = DataFrame(data)
     df.name = squeeze.name
@@ -209,7 +209,7 @@ Kwargs:
     tr (value, optional): Use True Range for Keltner Channels. Default: True
     asint (value, optional): Use integers instead of bool. Default: True
     mamode (value, optional): Which MA to use. Default: "sma"
-    lazybear (value, optional): Use LazyBear's TradingView implementation.  
+    lazybear (value, optional): Use LazyBear's TradingView implementation.
         Default: False
     detailed (value, optional): Return additional variations of SQZ for
         visualization. Default: False

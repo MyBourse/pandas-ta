@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from pandas import DataFrame
-from pandas_ta.overlap import ema, sma
+from pandas_ta.overlap import ma
 from pandas_ta.utils import get_drift, get_offset, non_zero_range, verify_series
+
 
 def accbands(high, low, close, length=None, c=None, drift=None, mamode=None, offset=None, **kwargs):
     """Indicator: Acceleration Bands (ACCBANDS)"""
@@ -12,28 +13,19 @@ def accbands(high, low, close, length=None, c=None, drift=None, mamode=None, off
     high_low_range = non_zero_range(high, low)
     length = int(length) if length and length > 0 else 20
     c = float(c) if c and c > 0 else 4
-    min_periods = int(kwargs['min_periods']) if 'min_periods' in kwargs and kwargs['min_periods'] is not None else length
-    mamode = mamode.lower() if mamode else "sma"
+    mamode = mamode if isinstance(mamode, str) else "sma"
     drift = get_drift(drift)
     offset = get_offset(offset)
 
     # Calculate Result
-    hl_ratio  = high_low_range / (high + low)
+    hl_ratio = high_low_range / (high + low)
     hl_ratio *= c
     _lower = low * (1 - hl_ratio)
     _upper = high * (1 + hl_ratio)
 
-    if mamode == "ema":
-        # lower = _lower.ewm(span=length, min_periods=min_periods).mean()
-        # mid   = close.ewm(span=length, min_periods=min_periods).mean()
-        # upper = _upper.ewm(span=length, min_periods=min_periods).mean()
-        lower = ema(_lower, length=length)
-        mid   = ema(close, length=length)
-        upper = ema(_upper, length=length)
-    else: # "sma"
-        lower = sma(_lower, length=length)
-        mid   = sma(close, length=length)
-        upper = sma(_upper, length=length)
+    lower = ma(mamode, _lower, length=length)
+    mid = ma(mamode, close, length=length)
+    upper = ma(mamode, _upper, length=length)
 
     # Offset
     if offset != 0:
@@ -64,7 +56,6 @@ def accbands(high, low, close, length=None, c=None, drift=None, mamode=None, off
     accbandsdf.category = mid.category
 
     return accbandsdf
-
 
 
 accbands.__doc__ = \

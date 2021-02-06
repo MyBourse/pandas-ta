@@ -1,49 +1,35 @@
 # -*- coding: utf-8 -*-
-from ..overlap.ema import ema
-from ..overlap.hma import hma
-from ..overlap.sma import sma
-from ..overlap.rma import rma
-from ..overlap.wma import wma
-from ..utils import get_offset, verify_series, zero
+from pandas_ta.overlap import ma
+from pandas_ta.utils import get_offset, verify_series
+
 
 def bias(close, length=None, mamode=None, offset=None, **kwargs):
     """Indicator: Bias (BIAS)"""
     # Validate Arguments
     close = verify_series(close)
     length = int(length) if length and length > 0 else 26
-    mamode = mamode.lower() if mamode else None
+    mamode = mamode if isinstance(mamode, str) else "sma"
     offset = get_offset(offset)
 
     # Calculate Result
-    if mamode is None or mamode == 'sma':
-        ma = sma(close, length=length, **kwargs)
-    if mamode == 'ema':
-        ma = ema(close, length=length, **kwargs)
-    if mamode == 'hma':
-        ma = hma(close, length=length, **kwargs)
-    if mamode == 'rma':
-        ma = rma(close, length=length, **kwargs)
-    if mamode == 'wma':
-        ma = wma(close, length=length, **kwargs)
-
-    bias = (close / ma) - 1
+    bma = ma(mamode, close, length=length, **kwargs)
+    bias = (close / bma) - 1
 
     # Offset
     if offset != 0:
         bias = bias.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        bias.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        bias.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        bias.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        bias.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
-    bias.name = f"BIAS_{ma.name}"
-    bias.category = 'momentum'
+    bias.name = f"BIAS_{bma.name}"
+    bias.category = "momentum"
 
     return bias
-
 
 
 bias.__doc__ = \
@@ -58,7 +44,7 @@ Sources:
 Calculation:
     Default Inputs:
         length=26, MA='sma'
-    
+
     BIAS = (close - MA(close, length)) / MA(close, length)
          = (close / MA(close, length)) - 1
 

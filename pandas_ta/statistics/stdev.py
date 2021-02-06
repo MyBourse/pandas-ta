@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from numpy import sqrt as npsqrt
 from .variance import variance
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def stdev(close, length=None, ddof=1, offset=None, **kwargs):
     """Indicator: Standard Deviation"""
@@ -25,7 +26,6 @@ def stdev(close, length=None, ddof=1, offset=None, **kwargs):
     return stdev
 
 
-
 stdev.__doc__ = \
 """Rolling Standard Deviation
 
@@ -39,11 +39,11 @@ Calculation:
 
 Args:
     close (pd.Series): Series of 'close's
-    length (int): It's period.  Default: 30
-    ddof (int): Delta Degrees of Freedom. 
-                The divisor used in calculations is N - ddof, 
-                where N represents the number of elements. Default: 1 
-    offset (int): How many periods to offset the result.  Default: 0
+    length (int): It's period. Default: 30
+    ddof (int): Delta Degrees of Freedom.
+                The divisor used in calculations is N - ddof,
+                where N represents the number of elements. Default: 1
+    offset (int): How many periods to offset the result. Default: 0
 
 Kwargs:
     fillna (value, optional): pd.DataFrame.fillna(value)

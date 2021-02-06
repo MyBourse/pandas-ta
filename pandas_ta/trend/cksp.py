@@ -3,6 +3,7 @@ from pandas import DataFrame
 from pandas_ta.volatility import atr
 from pandas_ta.utils import get_offset, verify_series
 
+
 def cksp(high, low, close, p=None, x=None, q=None, offset=None, **kwargs):
     """Indicator: Chande Kroll Stop (CKSP)"""
     # Validate Arguments
@@ -48,7 +49,6 @@ def cksp(high, low, close, p=None, x=None, q=None, offset=None, **kwargs):
     ckspdf.category = long_stop.category
 
     return ckspdf
-
 
 
 cksp.__doc__ = \

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, pascals_triangle, verify_series, weights
+from pandas_ta.utils import get_offset, pascals_triangle, verify_series, weights
+
 
 def pwma(close, length=None, asc=None, offset=None, **kwargs):
     """Indicator: Pascals Weighted Moving Average (PWMA)"""
     # Validate Arguments
     close = verify_series(close)
     length = int(length) if length and length > 0 else 10
-    min_periods = int(kwargs['min_periods']) if 'min_periods' in kwargs and kwargs['min_periods'] is not None else length
+    min_periods = int(kwargs["min_periods"]) if "min_periods" in kwargs and kwargs["min_periods"] is not None else length
     asc = asc if asc else True
     offset = get_offset(offset)
 
@@ -20,10 +21,9 @@ def pwma(close, length=None, asc=None, offset=None, **kwargs):
 
     # Name & Category
     pwma.name = f"PWMA_{length}"
-    pwma.category = 'overlap'
+    pwma.category = "overlap"
 
     return pwma
-
 
 
 pwma.__doc__ = \

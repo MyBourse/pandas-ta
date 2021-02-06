@@ -3,10 +3,9 @@ from .context import pandas_ta
 
 from unittest import TestCase, skip
 import pandas.testing as pdt
-from pandas import DataFrame, Series
+from pandas import Series
 
 import talib as tal
-
 
 
 class TestStatistics(TestCase):
@@ -18,7 +17,8 @@ class TestStatistics(TestCase):
         cls.high = cls.data["high"]
         cls.low = cls.data["low"]
         cls.close = cls.data["close"]
-        if "volume" in cls.data.columns: cls.volume = cls.data["volume"]
+        if "volume" in cls.data.columns:
+            cls.volume = cls.data["volume"]
 
     @classmethod
     def tearDownClass(cls):
@@ -26,12 +26,13 @@ class TestStatistics(TestCase):
         del cls.high
         del cls.low
         del cls.close
-        if hasattr(cls, "volume"): del cls.volume
+        if hasattr(cls, "volume"):
+            del cls.volume
         del cls.data
-
 
     def setUp(self): pass
     def tearDown(self): pass
+
 
     def test_entropy(self):
         result = pandas_ta.entropy(self.close)

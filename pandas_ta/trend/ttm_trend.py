@@ -3,6 +3,7 @@ from pandas import DataFrame
 from pandas_ta.overlap import hl2
 from pandas_ta.utils import get_offset, verify_series
 
+
 def ttm_trend(high, low, close, length=None, offset=None, **kwargs):
     """Indicator: TTM Trend (TTM_TRND)"""
     # Validate arguments
@@ -43,7 +44,6 @@ def ttm_trend(high, low, close, length=None, offset=None, **kwargs):
     df.category = tm_trend.category
 
     return df
-
 
 
 ttm_trend.__doc__ = \

@@ -1,9 +1,8 @@
 from .config import sample_data
 from .context import pandas_ta
 
-from unittest import TestCase
+from unittest import skip, TestCase
 from pandas import DataFrame
-
 
 
 class TestOverlapExtension(TestCase):
@@ -15,12 +14,8 @@ class TestOverlapExtension(TestCase):
     def tearDownClass(cls):
         del cls.data
 
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+    def setUp(self): pass
+    def tearDown(self): pass
 
 
     def test_dema_ext(self):
@@ -73,6 +68,11 @@ class TestOverlapExtension(TestCase):
         self.assertIsInstance(self.data, DataFrame)
         self.assertEqual(self.data.columns[-1], "LR_14")
 
+    def test_mcgd_ext(self):
+        self.data.ta.mcgd(append=True)
+        self.assertIsInstance(self.data, DataFrame)
+        self.assertEqual(self.data.columns[-1], "MCGD_10")
+
     def test_midpoint_ext(self):
         self.data.ta.midpoint(append=True)
         self.assertIsInstance(self.data, DataFrame)
@@ -108,6 +108,15 @@ class TestOverlapExtension(TestCase):
         self.assertIsInstance(self.data, DataFrame)
         self.assertEqual(self.data.columns[-1], "SMA_10")
 
+    def test_ssf_ext(self):
+        self.data.ta.ssf(append=True, poles=2)
+        self.assertIsInstance(self.data, DataFrame)
+        self.assertEqual(self.data.columns[-1], "SSF_10_2")
+
+        self.data.ta.ssf(append=True, poles=3)
+        self.assertIsInstance(self.data, DataFrame)
+        self.assertEqual(self.data.columns[-1], "SSF_10_3")
+
     def test_swma_ext(self):
         self.data.ta.swma(append=True)
         self.assertIsInstance(self.data, DataFrame)
@@ -133,10 +142,15 @@ class TestOverlapExtension(TestCase):
         self.assertIsInstance(self.data, DataFrame)
         self.assertEqual(self.data.columns[-1], "TRIMA_10")
 
+    def test_vidya_ext(self):
+        self.data.ta.vidya(append=True)
+        self.assertIsInstance(self.data, DataFrame)
+        self.assertEqual(self.data.columns[-1], "VIDYA_14")
+
     def test_vwap_ext(self):
         self.data.ta.vwap(append=True)
         self.assertIsInstance(self.data, DataFrame)
-        self.assertEqual(self.data.columns[-1], "VWAP")
+        self.assertEqual(self.data.columns[-1], "VWAP_D")
 
     def test_vwma_ext(self):
         self.data.ta.vwma(append=True)

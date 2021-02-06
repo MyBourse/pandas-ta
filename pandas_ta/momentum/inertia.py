@@ -3,6 +3,7 @@ from pandas_ta.overlap import linreg
 from pandas_ta.volatility import rvi
 from pandas_ta.utils import get_drift, get_offset, non_zero_range, verify_series
 
+
 def inertia(close=None, high=None, low=None, length=None, rvi_length=None, scalar=None, refined=None, thirds=None, mamode=None, drift=None, offset=None, **kwargs):
     """Indicator: Inertia (INERTIA)"""
     # Validate Arguments
@@ -12,6 +13,7 @@ def inertia(close=None, high=None, low=None, length=None, rvi_length=None, scala
     scalar = float(scalar) if scalar and scalar > 0 else 100
     refined = False if refined is None else True
     thirds = False if thirds is None else True
+    mamode = mamode if isinstance(mamode, str) else "ema"
     drift = get_drift(drift)
     offset = get_offset(offset)
 
@@ -20,14 +22,14 @@ def inertia(close=None, high=None, low=None, length=None, rvi_length=None, scala
         low = verify_series(low)
 
     # Calculate Result
-    _mode = ""
     if refined:
-        rvi_ = rvi(close, high=high, low=low, length=rvi_length, scalar=scalar, refined=refined, mamode=mamode)
         _mode = "r"
+        rvi_ = rvi(close, high=high, low=low, length=rvi_length, scalar=scalar, refined=refined, mamode=mamode)
     elif thirds:
-        rvi_ = rvi(close, high=high, low=low, length=rvi_length, scalar=scalar, thirds=thirds, mamode=mamode)
         _mode = "t"
+        rvi_ = rvi(close, high=high, low=low, length=rvi_length, scalar=scalar, thirds=thirds, mamode=mamode)
     else:
+        _mode = ""
         rvi_ = rvi(close, length=rvi_length, scalar=scalar, mamode=mamode)
 
     inertia = linreg(rvi_, length=length)
@@ -37,10 +39,10 @@ def inertia(close=None, high=None, low=None, length=None, rvi_length=None, scala
         inertia = inertia.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        inertia.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        inertia.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        inertia.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        inertia.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name & Category
     _props = f"_{length}_{rvi_length}"
@@ -48,7 +50,6 @@ def inertia(close=None, high=None, low=None, length=None, rvi_length=None, scala
     inertia.category = "momentum"
 
     return inertia
-
 
 
 inertia.__doc__ = \

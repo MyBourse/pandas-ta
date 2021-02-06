@@ -13,7 +13,7 @@ def supertrend(high, low, close, length=None, multiplier=None, offset=None, **kw
     low = verify_series(low)
     close = verify_series(close)
     length = int(length) if length and length > 0 else 7
-    multiplier = float(multiplier) if multiplier and multiplier > 0 else 3.
+    multiplier = float(multiplier) if multiplier and multiplier > 0 else 3.0
     offset = get_offset(offset)
 
     # Calculate Results
@@ -37,7 +37,7 @@ def supertrend(high, low, close, length=None, multiplier=None, offset=None, **kw
                 lowerband.iloc[i] = lowerband.iloc[i - 1]
             if dir_[i] < 0 and upperband.iloc[i] > upperband.iloc[i - 1]:
                 upperband.iloc[i] = upperband.iloc[i - 1]
-        
+
         if dir_[i] > 0:
             trend[i] = long[i] = lowerband.iloc[i]
         else:
@@ -46,11 +46,11 @@ def supertrend(high, low, close, length=None, multiplier=None, offset=None, **kw
     # Prepare DataFrame to return
     _props = f"_{length}_{multiplier}"
     df = DataFrame({
-        f"SUPERT{_props}": trend,
-        f"SUPERTd{_props}": dir_,
-        f"SUPERTl{_props}": long,
-        f"SUPERTs{_props}": short
-    }, index=close.index)
+            f"SUPERT{_props}": trend,
+            f"SUPERTd{_props}": dir_,
+            f"SUPERTl{_props}": long,
+            f"SUPERTs{_props}": short,
+        }, index=close.index)
 
     df.name = f"SUPERT{_props}"
     df.category = "overlap"

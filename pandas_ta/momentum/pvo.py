@@ -3,6 +3,7 @@ from pandas import DataFrame
 from pandas_ta.overlap import ema
 from pandas_ta.utils import get_offset, verify_series
 
+
 def pvo(volume, fast=None, slow=None, signal=None, scalar=None, offset=None, **kwargs):
     """Indicator: Percentage Volume Oscillator (PVO)"""
     # Validate Arguments
@@ -31,14 +32,14 @@ def pvo(volume, fast=None, slow=None, signal=None, scalar=None, offset=None, **k
         signalma = signalma.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        pvo.fillna(kwargs['fillna'], inplace=True)
-        histogram.fillna(kwargs['fillna'], inplace=True)
-        signalma.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        pvo.fillna(method=kwargs['fill_method'], inplace=True)
-        histogram.fillna(method=kwargs['fill_method'], inplace=True)
-        signalma.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        pvo.fillna(kwargs["fillna"], inplace=True)
+        histogram.fillna(kwargs["fillna"], inplace=True)
+        signalma.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        pvo.fillna(method=kwargs["fill_method"], inplace=True)
+        histogram.fillna(method=kwargs["fill_method"], inplace=True)
+        signalma.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     _props = f"_{fast}_{slow}_{signal}"
@@ -54,7 +55,6 @@ def pvo(volume, fast=None, slow=None, signal=None, scalar=None, offset=None, **k
     df.category = pvo.category
 
     return df
-
 
 
 pvo.__doc__ = \

@@ -5,7 +5,6 @@ from unittest import TestCase
 from pandas import DataFrame
 
 
-
 class TestStatisticsExtension(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -15,12 +14,8 @@ class TestStatisticsExtension(TestCase):
     def tearDownClass(cls):
         del cls.data
 
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+    def setUp(self): pass
+    def tearDown(self): pass
 
 
     def test_entropy_ext(self):

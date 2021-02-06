@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from pandas import DataFrame, concat
+from pandas import concat, DataFrame
 from .tsi import tsi
 from pandas_ta.overlap import ema
 from pandas_ta.utils import get_offset, verify_series, signals
+
 
 def smi(close, fast=None, slow=None, signal=None, scalar=None, offset=None, **kwargs):
     """Indicator: SMI Ergodic Indicator (SMIIO)"""
@@ -52,7 +53,6 @@ def smi(close, fast=None, slow=None, signal=None, scalar=None, offset=None, **kw
     df.category = smi.category
 
     return df
-
 
 
 smi.__doc__ = \

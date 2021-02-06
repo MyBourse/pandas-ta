@@ -1,34 +1,33 @@
 # -*- coding: utf-8 -*-
-from .ema import ema
-from .hma import hma
-from .rma import rma
-from .sma import sma
-from .wma import wma
-from ..utils import get_offset, verify_series
+from . import (
+    dema, ema, hma, linreg, rma, sma, swma, t3, tema, trima, vidya, wma
+)
+from pandas_ta.utils import get_offset, verify_series
+
 
 def zlma(close, length=None, mamode=None, offset=None, **kwargs):
     """Indicator: Zero Lag Moving Average (ZLMA)"""
     # Validate Arguments
     close = verify_series(close)
     length = int(length) if length and length > 0 else 10
-    min_periods = int(kwargs['min_periods']) if 'min_periods' in kwargs and kwargs['min_periods'] is not None else length
     offset = get_offset(offset)
-    mamode = mamode.lower() if mamode else None
+    mamode = mamode.lower() if isinstance(mamode, str) else "ema"
 
     # Calculate Result
     lag = int(0.5 * (length - 1))
-    close = 2 * close - close.shift(lag)
-
-    if mamode is None or mamode == 'ema':
-        zlma = ema(close, length=length, **kwargs)
-    if mamode == 'hma':
-        zlma = hma(close, length=length, **kwargs)
-    if mamode == 'rma':
-        zlma = rma(close, length=length, **kwargs)
-    if mamode == 'sma':
-        zlma = sma(close, length=length, **kwargs)
-    if mamode == 'wma':
-        zlma = wma(close, length=length, **kwargs)
+    close_ = 2 * close - close.shift(lag)
+    if   mamode == "dema":   zlma = dema(close_, length=length, **kwargs)
+    elif mamode == "hma":    zlma = hma(close_, length=length, **kwargs)
+    elif mamode == "linreg": zlma = linreg(close_, length=length, **kwargs)
+    elif mamode == "rma":    zlma = rma(close_, length=length, **kwargs)
+    elif mamode == "sma":    zlma = sma(close_, length=length, **kwargs)
+    elif mamode == "swma":   zlma = swma(close_, length=length, **kwargs)
+    elif mamode == "t3":     zlma = t3(close_, length=length, **kwargs)
+    elif mamode == "tema":   zlma = tema(close_, length=length, **kwargs)
+    elif mamode == "trima":  zlma = trima(close_, length=length, **kwargs)
+    elif mamode == "vidya":  zlma = vidya(close_, length=length, **kwargs)
+    elif mamode == "wma":    zlma = wma(close_, length=length, **kwargs)
+    else:                    zlma = ema(close_, length=length, **kwargs) # "ema"
 
     # Offset
     if offset != 0:
@@ -36,10 +35,9 @@ def zlma(close, length=None, mamode=None, offset=None, **kwargs):
 
     # Name & Category
     zlma.name = f"ZL_{zlma.name}"
-    zlma.category = 'overlap'
+    zlma.category = "overlap"
 
     return zlma
-
 
 
 zlma.__doc__ = \

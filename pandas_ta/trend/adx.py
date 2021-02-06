@@ -4,6 +4,7 @@ from pandas_ta.overlap import rma
 from pandas_ta.volatility import atr
 from pandas_ta.utils import get_drift, get_offset, verify_series, zero
 
+
 def adx(high, low, close, length=None, scalar=None, drift=None, offset=None, **kwargs):
     """Indicator: ADX"""
     # Validate Arguments
@@ -18,8 +19,8 @@ def adx(high, low, close, length=None, scalar=None, drift=None, offset=None, **k
     # Calculate Result
     atr_ = atr(high=high, low=low, close=close, length=length)
 
-    up = high - high.shift(drift) # high.diff(drift)
-    dn = low.shift(drift) - low # low.diff(-drift).shift(drift)
+    up = high - high.shift(drift)  # high.diff(drift)
+    dn = low.shift(drift) - low    # low.diff(-drift).shift(drift)
 
     pos = ((up > dn) & (up > 0)) * up
     neg = ((dn > up) & (dn > 0)) * dn
@@ -55,16 +56,15 @@ def adx(high, low, close, length=None, scalar=None, drift=None, offset=None, **k
     dmp.name = f"DMP_{length}"
     dmn.name = f"DMN_{length}"
 
-    adx.category = dmp.category = dmn.category = 'trend'
+    adx.category = dmp.category = dmn.category = "trend"
 
     # Prepare DataFrame to return
     data = {adx.name: adx, dmp.name: dmp, dmn.name: dmn}
     adxdf = DataFrame(data)
     adxdf.name = f"ADX_{length}"
-    adxdf.category = 'trend'
+    adxdf.category = "trend"
 
     return adxdf
-
 
 
 adx.__doc__ = \

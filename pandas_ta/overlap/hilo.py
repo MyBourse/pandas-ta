@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from numpy import NaN as npNaN
 from pandas import DataFrame, Series
-from .ema import ema
-from .hma import hma
-from .sma import sma
+# from pandas_ta.overlap.ma import ma
+from .ma import ma
 from pandas_ta.utils import get_offset, verify_series
+
 
 def hilo(high, low, close, high_length=None, low_length=None, mamode=None, offset=None, **kwargs):
     """Indicator: Gann HiLo (HiLo)"""
@@ -14,7 +14,7 @@ def hilo(high, low, close, high_length=None, low_length=None, mamode=None, offse
     close = verify_series(close)
     high_length = int(high_length) if high_length and high_length > 0 else 13
     low_length = int(low_length) if low_length and low_length > 0 else 21
-    mamode = mamode.lower() if mamode else "sma"
+    mamode = mamode.lower() if isinstance(mamode, str) else "sma"
     offset = get_offset(offset)
 
     # Calculate Result
@@ -23,21 +23,13 @@ def hilo(high, low, close, high_length=None, low_length=None, mamode=None, offse
     long = Series(npNaN, index=close.index)
     short = Series(npNaN, index=close.index)
 
-    if mamode == "ema":
-        high_ma = ema(high, high_length)
-        low_ma = ema(low, low_length)
-    if mamode == "hma":
-        high_ma = hma(high, high_length)
-        low_ma = hma(low, low_length)
-    else: # "sma"
-        high_ma = sma(high, high_length)
-        low_ma = sma(low, low_length)
+    high_ma = ma(mamode, high, length=high_length)
+    low_ma = ma(mamode, low, length=low_length)
 
     for i in range(1, m):
         if close.iloc[i] > high_ma.iloc[i - 1]:
             hilo.iloc[i] = long.iloc[i] = low_ma.iloc[i]
         elif close.iloc[i] < low_ma.iloc[i - 1]:
-
             hilo.iloc[i] = short.iloc[i] = high_ma.iloc[i]
         else:
             hilo.iloc[i] = hilo.iloc[i - 1]
@@ -46,26 +38,28 @@ def hilo(high, low, close, high_length=None, low_length=None, mamode=None, offse
     # Offset
     if offset != 0:
         hilo = hilo.shift(offset)
+        long = long.shift(offset)
+        short = short.shift(offset)
 
     # Handle fills
     if "fillna" in kwargs:
         hilo.fillna(kwargs["fillna"], inplace=True)
+        long.fillna(kwargs["fillna"], inplace=True)
+        short.fillna(kwargs["fillna"], inplace=True)
     if "fill_method" in kwargs:
         hilo.fillna(method=kwargs["fill_method"], inplace=True)
+        long.fillna(method=kwargs["fill_method"], inplace=True)
+        short.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name & Category
     _props = f"_{high_length}_{low_length}"
-    df = DataFrame({
-        f"HILO{_props}": hilo,
-        f"HILOl{_props}": long,
-        f"HILOs{_props}": short
-    }, index=close.index)
+    data = {f"HILO{_props}": hilo, f"HILOl{_props}": long, f"HILOs{_props}": short}
+    df = DataFrame(data, index=close.index)
 
     df.name = f"HILO{_props}"
     df.category = "overlap"
 
     return df
-
 
 
 hilo.__doc__ = \

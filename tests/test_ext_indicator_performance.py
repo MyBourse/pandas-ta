@@ -5,7 +5,6 @@ from unittest import TestCase
 from pandas import DataFrame
 
 
-
 class TestPerformaceExtension(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -16,7 +15,6 @@ class TestPerformaceExtension(TestCase):
     def tearDownClass(cls):
         del cls.data
         del cls.islong
-
 
     def setUp(self): pass
     def tearDown(self): pass

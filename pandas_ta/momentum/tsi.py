@@ -2,6 +2,7 @@
 from pandas_ta.overlap import ema
 from pandas_ta.utils import get_drift, get_offset, verify_series
 
+
 def tsi(close, fast=None, slow=None, scalar=None, drift=None, offset=None, **kwargs):
     """Indicator: True Strength Index (TSI)"""
     # Validate Arguments
@@ -40,7 +41,6 @@ def tsi(close, fast=None, slow=None, scalar=None, drift=None, offset=None, **kwa
     tsi.category = "momentum"
 
     return tsi
-
 
 
 tsi.__doc__ = \

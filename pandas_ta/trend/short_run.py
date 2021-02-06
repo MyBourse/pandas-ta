@@ -3,6 +3,7 @@ from .decreasing import decreasing
 from .increasing import increasing
 from pandas_ta.utils import get_offset, verify_series
 
+
 def short_run(fast, slow, length=None, offset=None, **kwargs):
     """Indicator: Short Run"""
     # Validate Arguments

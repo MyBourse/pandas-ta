@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from .sma import sma
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def vwma(close, volume, length=None, offset=None, **kwargs):
     """Indicator: Volume Weighted Moving Average (VWMA)"""
@@ -20,10 +21,9 @@ def vwma(close, volume, length=None, offset=None, **kwargs):
 
     # Name & Category
     vwma.name = f"VWMA_{length}"
-    vwma.category = 'overlap'
+    vwma.category = "overlap"
 
     return vwma
-
 
 
 vwma.__doc__ = \

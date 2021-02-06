@@ -4,6 +4,7 @@ from pandas import DataFrame
 from pandas_ta.volatility import atr
 from pandas_ta.utils import get_offset, get_drift, verify_series
 
+
 def chop(high, low, close, length=None, atr_length=None, scalar=None, drift=None, offset=None, **kwargs):
     """Indicator: Choppiness Index (CHOP)"""
     # Validate Arguments
@@ -11,7 +12,8 @@ def chop(high, low, close, length=None, atr_length=None, scalar=None, drift=None
     low = verify_series(low)
     close = verify_series(close)
     length = int(length) if length and length > 0 else 14
-    atr_length = int(atr_length) if atr_length is not None and atr_length > 0 else 1
+    atr_length = int(
+        atr_length) if atr_length is not None and atr_length > 0 else 1
     scalar = float(scalar) if scalar else 100
     drift = get_drift(drift)
     offset = get_offset(offset)
@@ -40,7 +42,6 @@ def chop(high, low, close, length=None, atr_length=None, scalar=None, drift=None
     chop.category = "trend"
 
     return chop
-
 
 
 chop.__doc__ = \

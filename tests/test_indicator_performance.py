@@ -5,20 +5,23 @@ from unittest import TestCase
 from pandas import Series
 
 
-
 class TestPerformace(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.data = sample_data
         cls.close = cls.data["close"]
         cls.islong = (cls.close > pandas_ta.sma(cls.close, length=8)).astype(int)
+        cls.pctret = pandas_ta.percent_return(cls.close, cumulative=False)
+        cls.logret = pandas_ta.percent_return(cls.close, cumulative=False)
+
 
     @classmethod
     def tearDownClass(cls):
         del cls.data
         del cls.close
         del cls.islong
-
+        del cls.pctret
+        del cls.logret
 
     def setUp(self): pass
     def tearDown(self): pass

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def hl2(high, low, offset=None, **kwargs):
     """Indicator: HL2 """
@@ -17,6 +18,6 @@ def hl2(high, low, offset=None, **kwargs):
 
     # Name & Category
     hl2.name = "HL2"
-    hl2.category = 'overlap'
+    hl2.category = "overlap"
 
     return hl2

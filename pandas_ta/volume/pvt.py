@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from ..momentum.roc import roc
-from ..utils import get_drift, get_offset, verify_series
+from pandas_ta.momentum import roc
+from pandas_ta.utils import get_drift, get_offset, verify_series
+
 
 def pvt(close, volume, drift=None, offset=None, **kwargs):
     """Indicator: Price-Volume Trend (PVT)"""
@@ -19,17 +20,16 @@ def pvt(close, volume, drift=None, offset=None, **kwargs):
         pvt = pvt.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        pvt.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        pvt.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        pvt.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        pvt.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     pvt.name = f"PVT"
-    pvt.category = 'volume'
+    pvt.category = "volume"
 
     return pvt
-
 
 
 pvt.__doc__ = \

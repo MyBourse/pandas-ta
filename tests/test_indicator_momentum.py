@@ -8,7 +8,6 @@ from pandas import DataFrame, Series
 import talib as tal
 
 
-
 class TestMomentum(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -18,7 +17,8 @@ class TestMomentum(TestCase):
         cls.high = cls.data["high"]
         cls.low = cls.data["low"]
         cls.close = cls.data["close"]
-        if "volume" in cls.data.columns: cls.volume = cls.data["volume"]
+        if "volume" in cls.data.columns:
+            cls.volume = cls.data["volume"]
 
     @classmethod
     def tearDownClass(cls):
@@ -26,13 +26,13 @@ class TestMomentum(TestCase):
         del cls.high
         del cls.low
         del cls.close
-        if hasattr(cls, "volume"): del cls.volume
+        if hasattr(cls, "volume"):
+            del cls.volume
         del cls.data
-
 
     def setUp(self): pass
     def tearDown(self): pass
-    
+
 
     def test_datetime_ordered(self):
         # Test if datetime64 index and ordered
@@ -119,6 +119,11 @@ class TestMomentum(TestCase):
             except Exception as ex:
                 error_analysis(result, CORRELATION, ex)
 
+    def test_cfo(self):
+        result = pandas_ta.cfo(self.close)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "CFO_9")
+
     def test_cg(self):
         result = pandas_ta.cg(self.close)
         self.assertIsInstance(result, Series)
@@ -172,7 +177,6 @@ class TestMomentum(TestCase):
         self.assertIsInstance(result, Series)
         self.assertEqual(result.name, "INERTIAt_20_14")
 
-
     def test_kdj(self):
         result = pandas_ta.kdj(self.high, self.low, self.close)
         self.assertIsInstance(result, DataFrame)
@@ -194,22 +198,22 @@ class TestMomentum(TestCase):
             pdt.assert_frame_equal(result, expecteddf)
         except AssertionError as ae:
             try:
-                macd_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,0], expecteddf.iloc[:,0], col=CORRELATION)
+                macd_corr = pandas_ta.utils.df_error_analysis(result.iloc[:, 0], expecteddf.iloc[:, 0], col=CORRELATION)
                 self.assertGreater(macd_corr, CORRELATION_THRESHOLD)
             except Exception as ex:
-                error_analysis(result.iloc[:,0], CORRELATION, ex)
+                error_analysis(result.iloc[:, 0], CORRELATION, ex)
 
             try:
-                history_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,1], expecteddf.iloc[:,1], col=CORRELATION)
+                history_corr = pandas_ta.utils.df_error_analysis(result.iloc[:, 1], expecteddf.iloc[:, 1], col=CORRELATION)
                 self.assertGreater(history_corr, CORRELATION_THRESHOLD)
             except Exception as ex:
-                error_analysis(result.iloc[:,1], CORRELATION, ex, newline=False)
+                error_analysis(result.iloc[:, 1], CORRELATION, ex, newline=False)
 
             try:
-                signal_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,2], expecteddf.iloc[:,2], col=CORRELATION)
+                signal_corr = pandas_ta.utils.df_error_analysis(result.iloc[:, 2], expecteddf.iloc[:, 2], col=CORRELATION)
                 self.assertGreater(signal_corr, CORRELATION_THRESHOLD)
             except Exception as ex:
-                error_analysis(result.iloc[:,2], CORRELATION, ex, newline=False)
+                error_analysis(result.iloc[:, 2], CORRELATION, ex, newline=False)
 
     def test_mom(self):
         result = pandas_ta.mom(self.close)
@@ -256,6 +260,11 @@ class TestMomentum(TestCase):
         self.assertIsInstance(result, DataFrame)
         self.assertEqual(result.name, "PVO_12_26_9")
 
+    def test_qqe(self):
+        result = pandas_ta.qqe(self.close)
+        self.assertIsInstance(result, DataFrame)
+        self.assertEqual(result.name, "QQE_14_5_4.236")
+
     def test_roc(self):
         result = pandas_ta.roc(self.close)
         self.assertIsInstance(result, Series)
@@ -285,6 +294,11 @@ class TestMomentum(TestCase):
                 self.assertGreater(corr, CORRELATION_THRESHOLD)
             except Exception as ex:
                 error_analysis(result, CORRELATION, ex)
+
+    def test_rsx(self):
+        result = pandas_ta.rsx(self.close)
+        self.assertIsInstance(result, Series)
+        self.assertEqual(result.name, "RSX_14")
 
     def test_rvgi(self):
         result = pandas_ta.rvgi(self.open, self.high, self.low, self.close)
@@ -341,7 +355,6 @@ class TestMomentum(TestCase):
         result = pandas_ta.stoch(self.high, self.low, self.close)
         self.assertIsInstance(result, DataFrame)
         self.assertEqual(result.name, "STOCH_14_3_3")
-
 
     def test_stochrsi(self):
         # TV Correlation

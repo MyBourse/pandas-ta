@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from numpy import array_split
 from pandas import concat, DataFrame
-from ..utils import signed_series, verify_series
+from pandas_ta.utils import signed_series, verify_series
+
 
 def vp(close, volume, width=None, **kwargs):
     """Indicator: Volume Profile (VP)"""
@@ -9,7 +10,7 @@ def vp(close, volume, width=None, **kwargs):
     close = verify_series(close)
     volume = verify_series(volume)
     width = int(width) if width and width > 0 else 10
-    sort_close = kwargs.pop('sort_close', False)
+    sort_close = kwargs.pop("sort_close", False)
 
     # Setup
     signed_volume = signed_series(volume, initial=1)
@@ -47,14 +48,14 @@ def vp(close, volume, width=None, **kwargs):
     vpdf[total_volume_col] = vpdf[pos_volume_col] + vpdf[neg_volume_col]
 
     # Handle fills
-    if 'fillna' in kwargs:
-        vpdf.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        vpdf.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        vpdf.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        vpdf.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     vpdf.name = f"VP_{width}"
-    vpdf.category = 'volume'
+    vpdf.category = "volume"
 
     return vpdf
 
@@ -73,7 +74,7 @@ Sources:
 Calculation:
     Default Inputs:
         width=10
-    
+
     vp = pd.concat([close, pos_volume, neg_volume], axis=1)
     vp_ranges = np.array_split(vp, width)
     result = ({high_close, low_close, mean_close, neg_volume, pos_volume} foreach range in vp_ranges)

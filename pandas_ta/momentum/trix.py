@@ -3,6 +3,7 @@ from pandas import DataFrame
 from pandas_ta.overlap.ema import ema
 from pandas_ta.utils import get_drift, get_offset, verify_series
 
+
 def trix(close, length=None, signal=None, scalar=None, drift=None, offset=None, **kwargs):
     """Indicator: Trix (TRIX)"""
     # Validate Arguments
@@ -10,7 +11,6 @@ def trix(close, length=None, signal=None, scalar=None, drift=None, offset=None, 
     length = int(length) if length and length > 0 else 30
     signal = int(signal) if signal and signal > 0 else 9
     scalar = float(scalar) if scalar else 100
-    min_periods = int(kwargs['min_periods']) if 'min_periods' in kwargs and kwargs['min_periods'] is not None else length
     drift = get_drift(drift)
     offset = get_offset(offset)
 
@@ -28,12 +28,12 @@ def trix(close, length=None, signal=None, scalar=None, drift=None, offset=None, 
         trix_signal = trix_signal.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        trix.fillna(kwargs['fillna'], inplace=True)
-        trix_signal.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        trix.fillna(method=kwargs['fill_method'], inplace=True)
-        trix_signal.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        trix.fillna(kwargs["fillna"], inplace=True)
+        trix_signal.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        trix.fillna(method=kwargs["fill_method"], inplace=True)
+        trix_signal.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name & Category
     trix.name = f"TRIX_{length}_{signal}"
@@ -46,7 +46,6 @@ def trix(close, length=None, signal=None, scalar=None, drift=None, offset=None, 
     df.category = "momentum"
 
     return df
-
 
 
 trix.__doc__ = \

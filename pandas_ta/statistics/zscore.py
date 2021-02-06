@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from ..overlap.sma import sma
+from pandas_ta.overlap import sma
 from .stdev import stdev
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def zscore(close, length=None, std=None, offset=None, **kwargs):
     """Indicator: Z Score"""
@@ -27,7 +28,6 @@ def zscore(close, length=None, std=None, offset=None, **kwargs):
     return zscore
 
 
-
 zscore.__doc__ = \
 """Rolling Z Score
 
@@ -44,9 +44,9 @@ Calculation:
 
 Args:
     close (pd.Series): Series of 'close's
-    length (int): It's period.  Default: 30
-    std (float): It's period.  Default: 1
-    offset (int): How many periods to offset the result.  Default: 0
+    length (int): It's period. Default: 30
+    std (float): It's period. Default: 1
+    offset (int): How many periods to offset the result. Default: 0
 
 Kwargs:
     fillna (value, optional): pd.DataFrame.fillna(value)

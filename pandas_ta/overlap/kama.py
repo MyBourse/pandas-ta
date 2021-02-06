@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from numpy import NaN as npNaN
 from pandas import Series, DataFrame
-from ..utils import get_drift, get_offset, non_zero_range, verify_series
+from pandas_ta.utils import get_drift, get_offset, non_zero_range, verify_series
+
 
 def kama(close, length=None, fast=None, slow=None, drift=None, offset=None, **kwargs):
     """Indicator: Kaufman's Adaptive Moving Average (HMA)"""
@@ -15,6 +16,7 @@ def kama(close, length=None, fast=None, slow=None, drift=None, offset=None, **kw
 
     # Calculate Result
     m = close.size
+
     def weight(length: int) -> float:
         return 2 / (length + 1)
 
@@ -31,7 +33,7 @@ def kama(close, length=None, fast=None, slow=None, drift=None, offset=None, **kw
     result = [npNaN for _ in range(0, length - 1)] + [0]
     for i in range(length, m):
         result.append(sc[i] * close[i] + (1 - sc[i]) * result[i - 1])
-    
+
     kama = Series(result, index=close.index)
 
     # Offset
@@ -45,7 +47,6 @@ def kama(close, length=None, fast=None, slow=None, drift=None, offset=None, **kw
     return kama
 
 
-
 kama.__doc__ = \
 """Kaufman's Adaptive Moving Average (KAMA)
 
@@ -57,6 +58,7 @@ can be used to identify the overall trend, time turning points and filter price 
 
 Sources:
     https://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:kaufman_s_adaptive_moving_average
+    https://www.tradingview.com/script/wZGOIz9r-REPOST-Indicators-3-Different-Adaptive-Moving-Averages/
 
 Calculation:
     Default Inputs:

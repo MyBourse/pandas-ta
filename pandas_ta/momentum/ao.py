@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, verify_series
+from pandas_ta.overlap import sma
+from pandas_ta.utils import get_offset, verify_series
+
 
 def ao(high, low, fast=None, slow=None, offset=None, **kwargs):
     """Indicator: Awesome Oscillator (AO)"""
@@ -10,13 +12,12 @@ def ao(high, low, fast=None, slow=None, offset=None, **kwargs):
     slow = int(slow) if slow and slow > 0 else 34
     if slow < fast:
         fast, slow = slow, fast
-    min_periods = int(kwargs['min_periods']) if 'min_periods' in kwargs and kwargs['min_periods'] is not None else fast
     offset = get_offset(offset)
 
     # Calculate Result
     median_price = 0.5 * (high + low)
-    fast_sma = median_price.rolling(fast, min_periods=min_periods).mean()
-    slow_sma = median_price.rolling(slow, min_periods=min_periods).mean()
+    fast_sma = sma(median_price, fast)
+    slow_sma = sma(median_price, slow)
     ao = fast_sma - slow_sma
 
     # Offset
@@ -24,17 +25,16 @@ def ao(high, low, fast=None, slow=None, offset=None, **kwargs):
         ao = ao.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        ao.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        ao.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        ao.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        ao.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     ao.name = f"AO_{fast}_{slow}"
-    ao.category = 'momentum'
+    ao.category = "momentum"
 
     return ao
-
 
 
 ao.__doc__ = \

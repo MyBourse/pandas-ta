@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import sqrt as npsqrt
 from pandas_ta.overlap import sma
-from ..utils import get_offset, non_zero_range, verify_series
+from pandas_ta.utils import get_offset, non_zero_range, verify_series
 
 
 def ui(close, length=None, scalar=None, offset=None, **kwargs):
@@ -40,7 +40,6 @@ def ui(close, length=None, scalar=None, offset=None, **kwargs):
     ui.category = "volatility"
 
     return ui
-
 
 
 ui.__doc__ = \

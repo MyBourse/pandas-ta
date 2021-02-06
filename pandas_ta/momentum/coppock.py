@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from .roc import roc
-from ..overlap.rma import rma
-from ..overlap.wma import wma
-from ..utils import get_offset, verify_series
+from pandas_ta.overlap import wma
+from pandas_ta.utils import get_offset, verify_series
+
 
 def coppock(close, length=None, fast=None, slow=None, offset=None, **kwargs):
     """Indicator: Coppock Curve (COPC)"""
@@ -11,7 +11,6 @@ def coppock(close, length=None, fast=None, slow=None, offset=None, **kwargs):
     length = int(length) if length and length > 0 else 10
     fast = int(fast) if fast and fast > 0 else 11
     slow = int(slow) if slow and slow > 0 else 14
-    min_periods = int(kwargs['min_periods']) if 'min_periods' in kwargs and kwargs['min_periods'] is not None else length
     offset = get_offset(offset)
 
     # Calculate Result
@@ -23,17 +22,16 @@ def coppock(close, length=None, fast=None, slow=None, offset=None, **kwargs):
         coppock = coppock.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        coppock.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        coppock.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        coppock.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        coppock.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     coppock.name = f"COPC_{fast}_{slow}_{length}"
-    coppock.category = 'momentum'
+    coppock.category = "momentum"
 
     return coppock
-
 
 
 coppock.__doc__ = \

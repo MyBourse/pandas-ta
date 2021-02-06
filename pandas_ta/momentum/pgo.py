@@ -3,6 +3,7 @@ from pandas_ta.overlap import ema, sma
 from pandas_ta.volatility import atr
 from pandas_ta.utils import get_offset, verify_series
 
+
 def pgo(high, low, close, length=None, offset=None, **kwargs):
     """Indicator: Pretty Good Oscillator (PGO)"""
     # Validate arguments
@@ -21,17 +22,16 @@ def pgo(high, low, close, length=None, offset=None, **kwargs):
         pgo = pgo.shift(offset)
 
     # Handle fills
-    if 'fillna' in kwargs:
-        pgo.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        pgo.fillna(method=kwargs['fill_method'], inplace=True)
+    if "fillna" in kwargs:
+        pgo.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        pgo.fillna(method=kwargs["fill_method"], inplace=True)
 
     # Name and Categorize it
     pgo.name = f"PGO_{length}"
     pgo.category = "momentum"
 
     return pgo
-
 
 
 pgo.__doc__ = \

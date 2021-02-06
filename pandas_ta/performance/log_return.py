@@ -2,6 +2,7 @@
 from numpy import log as nplog
 from pandas_ta.utils import get_offset, verify_series
 
+
 def log_return(close, length=None, cumulative=False, offset=None, **kwargs):
     """Indicator: Log Return"""
     # Validate Arguments
@@ -18,19 +19,18 @@ def log_return(close, length=None, cumulative=False, offset=None, **kwargs):
     # Offset
     if offset != 0:
         log_return = log_return.shift(offset)
-    
+
     # Handle fills
     if "fillna" in kwargs:
         log_return.fillna(kwargs["fillna"], inplace=True)
     if "fill_method" in kwargs:
         log_return.fillna(method=kwargs["fill_method"], inplace=True)
-        
+
     # Name & Category
     log_return.name = f"{'CUM' if cumulative else ''}LOGRET_{length}"
     log_return.category = "performance"
 
     return log_return
-
 
 
 log_return.__doc__ = \

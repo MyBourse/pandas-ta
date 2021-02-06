@@ -8,7 +8,6 @@ from pandas import DataFrame, Series
 import talib as tal
 
 
-
 class TestVolatility(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -18,7 +17,8 @@ class TestVolatility(TestCase):
         cls.high = cls.data["high"]
         cls.low = cls.data["low"]
         cls.close = cls.data["close"]
-        if "volume" in cls.data.columns: cls.volume = cls.data["volume"]
+        if "volume" in cls.data.columns:
+            cls.volume = cls.data["volume"]
 
     @classmethod
     def tearDownClass(cls):
@@ -26,13 +26,13 @@ class TestVolatility(TestCase):
         del cls.high
         del cls.low
         del cls.close
-        if hasattr(cls, "volume"): del cls.volume
+        if hasattr(cls, "volume"):
+            del cls.volume
         del cls.data
-
 
     def setUp(self): pass
     def tearDown(self): pass
-    
+
 
     def test_aberration(self):
         result = pandas_ta.aberration(self.high, self.low, self.close)
@@ -47,7 +47,7 @@ class TestVolatility(TestCase):
     def test_atr(self):
         result = pandas_ta.atr(self.high, self.low, self.close)
         self.assertIsInstance(result, Series)
-        self.assertEqual(result.name, "ATR_14")
+        self.assertEqual(result.name, "ATRr_14")
 
         try:
             expected = tal.ATR(self.high, self.low, self.close)
@@ -70,22 +70,22 @@ class TestVolatility(TestCase):
             pdt.assert_frame_equal(result, expecteddf)
         except AssertionError as ae:
             try:
-                bbl_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,0], expecteddf.iloc[:,0], col=CORRELATION)
+                bbl_corr = pandas_ta.utils.df_error_analysis(result.iloc[:, 0], expecteddf.iloc[:,0], col=CORRELATION)
                 self.assertGreater(bbl_corr, CORRELATION_THRESHOLD)
             except Exception as ex:
-                error_analysis(result.iloc[:,0], CORRELATION, ex)
+                error_analysis(result.iloc[:, 0], CORRELATION, ex)
 
             try:
-                bbm_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,1], expecteddf.iloc[:,1], col=CORRELATION)
+                bbm_corr = pandas_ta.utils.df_error_analysis(result.iloc[:, 1], expecteddf.iloc[:,1], col=CORRELATION)
                 self.assertGreater(bbm_corr, CORRELATION_THRESHOLD)
             except Exception as ex:
-                error_analysis(result.iloc[:,1], CORRELATION, ex, newline=False)
+                error_analysis(result.iloc[:, 1], CORRELATION, ex, newline=False)
 
             try:
-                bbu_corr = pandas_ta.utils.df_error_analysis(result.iloc[:,2], expecteddf.iloc[:,2], col=CORRELATION)
+                bbu_corr = pandas_ta.utils.df_error_analysis(result.iloc[:, 2], expecteddf.iloc[:,2], col=CORRELATION)
                 self.assertGreater(bbu_corr, CORRELATION_THRESHOLD)
             except Exception as ex:
-                error_analysis(result.iloc[:,2], CORRELATION, ex, newline=False)
+                error_analysis(result.iloc[:, 2], CORRELATION, ex, newline=False)
 
     def test_donchian(self):
         result = pandas_ta.donchian(self.high, self.low)
@@ -96,11 +96,10 @@ class TestVolatility(TestCase):
         self.assertIsInstance(result, DataFrame)
         self.assertEqual(result.name, "DC_20_5")
 
-
     def test_kc(self):
         result = pandas_ta.kc(self.high, self.low, self.close)
         self.assertIsInstance(result, DataFrame)
-        self.assertEqual(result.name, "KC_20_2")
+        self.assertEqual(result.name, "KCe_20_2")
 
         result = pandas_ta.kc(self.high, self.low, self.close, mamode="sma")
         self.assertIsInstance(result, DataFrame)
@@ -143,6 +142,11 @@ class TestVolatility(TestCase):
         result = pandas_ta.rvi(self.close, self.high, self.low, thirds=True)
         self.assertIsInstance(result, Series)
         self.assertEqual(result.name, "RVIt_14")
+
+    def test_thermo(self):
+        result = pandas_ta.thermo(self.high, self.low)
+        self.assertIsInstance(result, DataFrame)
+        self.assertEqual(result.name, "THERMO_20_2_0.5")
 
     def test_true_range(self):
         result = pandas_ta.true_range(self.high, self.low, self.close)

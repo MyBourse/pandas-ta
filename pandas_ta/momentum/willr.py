@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from pandas_ta.utils import get_drift, get_offset, verify_series
 
+
 def willr(high, low, close, length=None, offset=None, **kwargs):
     """Indicator: William's Percent R (WILLR)"""
     # Validate arguments
@@ -32,7 +33,6 @@ def willr(high, low, close, length=None, offset=None, **kwargs):
     willr.category = "momentum"
 
     return willr
-
 
 
 willr.__doc__ = \

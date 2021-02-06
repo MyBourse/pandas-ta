@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from ..utils import get_offset, verify_series
+from pandas_ta.utils import get_offset, verify_series
+
 
 def skew(close, length=None, offset=None, **kwargs):
     """Indicator: Skew"""
     # Validate Arguments
     close = verify_series(close)
     length = int(length) if length and length > 0 else 30
-    min_periods = int(kwargs['min_periods']) if 'min_periods' in kwargs and kwargs['min_periods'] is not None else length
+    min_periods = int(kwargs["min_periods"]) if "min_periods" in kwargs and kwargs["min_periods"] is not None else length
     offset = get_offset(offset)
 
     # Calculate Result
@@ -15,19 +16,18 @@ def skew(close, length=None, offset=None, **kwargs):
     # Offset
     if offset != 0:
         skew = skew.shift(offset)
-        
+
     # Handle fills
-    if 'fillna' in kwargs:
-        skew.fillna(kwargs['fillna'], inplace=True)
-    if 'fill_method' in kwargs:
-        skew.fillna(method=kwargs['fill_method'], inplace=True)
-        
+    if "fillna" in kwargs:
+        skew.fillna(kwargs["fillna"], inplace=True)
+    if "fill_method" in kwargs:
+        skew.fillna(method=kwargs["fill_method"], inplace=True)
+
     # Name & Category
     skew.name = f"SKEW_{length}"
     skew.category = "statistics"
 
     return skew
-
 
 
 skew.__doc__ = \
@@ -42,8 +42,8 @@ Calculation:
 
 Args:
     close (pd.Series): Series of 'close's
-    length (int): It's period.  Default: 30
-    offset (int): How many periods to offset the result.  Default: 0
+    length (int): It's period. Default: 30
+    offset (int): How many periods to offset the result. Default: 0
 
 Kwargs:
     fillna (value, optional): pd.DataFrame.fillna(value)
